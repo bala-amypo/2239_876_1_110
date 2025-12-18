@@ -1,33 +1,37 @@
-package com.example.demo.controller;
+package com.example.demo.service;
 
 import com.example.demo.entity.AllocationRule;
-import com.example.demo.service.AllocationRuleService;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.exception.ValidationException;
+import com.example.demo.repository.AllocationRuleRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/rules")
-public class AllocationRuleController {
+@Service
+public class AllocationRuleService {
 
-    private final AllocationRuleService ruleService;
+    private final AllocationRuleRepository ruleRepository;
 
-    public AllocationRuleController(AllocationRuleService ruleService) {
-        this.ruleService = ruleService;
+    // ⚠️ Constructor order EXACT
+    public AllocationRuleService(AllocationRuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
     }
 
-    @PostMapping
-    public AllocationRule createRule(@RequestBody AllocationRule rule) {
-        return ruleService.createRule(rule);
+    public AllocationRule createRule(AllocationRule rule) {
+        if (ruleRepository.existsByRuleName(rule.getRuleName())) {
+            throw new ValidationException("rule exists");
+        }
+        if (rule.getPriorityWeight() != null && rule.getPriorityWeight() < 0) {
+            throw new ValidationException("priority must be >= 0");
+        }
+        return ruleRepository.save(rule);
     }
 
-    @GetMapping
+    public AllocationRule getRule(Long id) {
+        return ruleRepository.findById(id).orElse(null);
+    }
+
     public List<AllocationRule> getAllRules() {
-        return ruleService.getAllRules();
-    }
-
-    @GetMapping("/{id}")
-    public AllocationRule getRule(@PathVariable Long id) {
-        return ruleService.getRule(id);
+        return ruleRepository.findAll();
     }
 }

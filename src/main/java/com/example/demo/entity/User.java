@@ -1,10 +1,13 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-// public class User {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +20,8 @@ import java.time.LocalDateTime;
 
     private String role = "USER";
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    // ---------- Getters & Setters ----------
 
-    // getters and setters
     public Long getId() {
         return id;
     }
@@ -51,9 +53,4 @@ import java.time.LocalDateTime;
     public void setRole(String role) {
         this.role = role;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-}  
+}

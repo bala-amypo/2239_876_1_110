@@ -2,10 +2,11 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,6 +19,9 @@ public class User {
     private String role;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "requestedBy")
+    private List<ResourceRequest> requests;
 
     public User() {}
 
@@ -42,4 +46,7 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public List<ResourceRequest> getRequests() { return requests; }
+    public void setRequests(List<ResourceRequest> requests) { this.requests = requests; }
 }

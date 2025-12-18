@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "allocation_rules")
 public class AllocationRule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -21,22 +21,6 @@ public class ResourceRequest {
     private String purpose;
     private String status;
 
-    // ✅ No-arg constructor (required by JPA)
-    public ResourceRequest() {}
-
-    // ✅ Parameterized constructor
-    public ResourceRequest(String resourceType, User requestedBy,
-                           LocalDateTime startTime, LocalDateTime endTime,
-                           String purpose, String status) {
-        this.resourceType = resourceType;
-        this.requestedBy = requestedBy;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.purpose = purpose;
-        this.status = status;
-    }
-
-    // getters & setters
     public Long getId() { return id; }
 
     public String getResourceType() { return resourceType; }
@@ -57,3 +41,19 @@ public class ResourceRequest {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }
+  public ResourceRequest() {}
+
+    // ✅ Parameterized constructor
+    public ResourceRequest(String resourceType, User requestedBy,
+                           LocalDateTime startTime, LocalDateTime endTime,
+                           String purpose, String status) {
+        this.resourceType = resourceType;
+        this.requestedBy = requestedBy;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.purpose = purpose;
+        this.status = status;
+    }
+     public ResourceRequest() {
+        
+     }

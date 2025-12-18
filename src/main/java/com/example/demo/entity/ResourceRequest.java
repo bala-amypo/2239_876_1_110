@@ -19,27 +19,31 @@ public class ResourceRequest {
     private LocalDateTime endTime;
 
     private String purpose;
-
     private String status;
 
+    // ✅ No-arg constructor (required by JPA)
     public ResourceRequest() {}
 
-    // getters and setters
-    public Long getId() { 
-    return id;
-     }
-    public String getResourceType() {
-     return resourceType; 
-     }
-    public void setResourceType(String resourceType) { 
-    this.resourceType = resourceType;
-     }
+    // ✅ Parameterized constructor
+    public ResourceRequest(String resourceType, User requestedBy,
+                           LocalDateTime startTime, LocalDateTime endTime,
+                           String purpose, String status) {
+        this.resourceType = resourceType;
+        this.requestedBy = requestedBy;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.purpose = purpose;
+        this.status = status;
+    }
 
-    public User getRequestedBy() {
-     return requestedBy;
-      }
-    public void setRequestedBy(User requestedBy) { 
-    this.requestedBy = requestedBy; }
+    // getters & setters
+    public Long getId() { return id; }
+
+    public String getResourceType() { return resourceType; }
+    public void setResourceType(String resourceType) { this.resourceType = resourceType; }
+
+    public User getRequestedBy() { return requestedBy; }
+    public void setRequestedBy(User requestedBy) { this.requestedBy = requestedBy; }
 
     public LocalDateTime getStartTime() { return startTime; }
     public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }

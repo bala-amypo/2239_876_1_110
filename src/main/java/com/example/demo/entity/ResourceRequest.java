@@ -43,7 +43,7 @@ public class ResourceRequest {
 }
   public ResourceRequest() {}
 
-    // ✅ Parameterized constructor
+   
     public ResourceRequest(String resourceType, User requestedBy,
                            LocalDateTime startTime, LocalDateTime endTime,
                            String purpose, String status) {
@@ -55,5 +55,5 @@ public class ResourceRequest {
         this.status = status;
     }
      public ResourceRequest() {
-        
+
      }

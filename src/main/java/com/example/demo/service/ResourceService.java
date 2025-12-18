@@ -1,13 +1,13 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.Resource;
-import java.util.List;
+// import com.example.demo.entity.Resource;
+// import java.util.List;
 
-public interface ResourceService {
+// public interface ResourceService {
 
-    Resource createResource(Resource resource);
+//     Resource createResource(Resource resource);
 
-    Resource getResource(Long id);
+//     Resource getResource(Long id);
 
-    List<Resource> getAllResources();
-}
+//     List<Resource> getAllResources();
+// }

@@ -4,62 +4,26 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "resources")
 public class Resource {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true)
     private String resourceName;
-
-    @Column(nullable = false)
     private String resourceType;
-
     private Integer capacity;
-
     private String location;
-
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // getters and setters
-    public Long getId() {
-        return id;
-    }
+    public Resource() {}
 
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
+    public Resource(String resourceName, String resourceType, Integer capacity, String location) {
         this.resourceName = resourceName;
-    }
-
-    public String getResourceType() {
-        return resourceType;
-    }
-
-    public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-    
-    public void setLocation(String location) {
         this.location = location;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    // getters and setters
 }

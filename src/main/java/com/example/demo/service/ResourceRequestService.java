@@ -1,15 +1,15 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.ResourceRequest;
-import java.util.List;
+// import com.example.demo.entity.ResourceRequest;
+// import java.util.List;
 
-public interface ResourceRequestService {
+// public interface ResourceRequestService {
 
-    ResourceRequest createRequest(Long userId, ResourceRequest request);
+//     ResourceRequest createRequest(Long userId, ResourceRequest request);
 
-    List<ResourceRequest> getRequestsByUser(Long userId);
+//     List<ResourceRequest> getRequestsByUser(Long userId);
 
-    ResourceRequest getRequest(Long id);
+//     ResourceRequest getRequest(Long id);
 
-    ResourceRequest updateRequestStatus(Long requestId, String status);
-}
+//     ResourceRequest updateRequestStatus(Long requestId, String status);
+// }

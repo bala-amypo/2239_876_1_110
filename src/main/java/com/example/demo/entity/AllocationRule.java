@@ -14,14 +14,24 @@ public class AllocationRule {
     private String ruleName;
 
     private String ruleType;
-
     private Integer priorityWeight;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    public AllocationRule() {
+    }
 
-    // getters and setters
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    // Getters & Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRuleName() {

@@ -3,6 +3,9 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+@Table(name = "users")
+public class User {
+}
 
 @Entity
 public class User {

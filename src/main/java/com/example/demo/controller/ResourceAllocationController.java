@@ -1,33 +1,97 @@
-// package com.example.demo.controller;
+package com.example.demo.entity;
 
-// import com.example.demo.entity.ResourceAllocation;
-// import com.example.demo.service.ResourceAllocationService;
-// import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-// import java.util.List;
+@Entity
+@Table(name = "resource_allocations")
+public class ResourceAllocation {
 
-// @RestController
-// @RequestMapping("/api/allocations")
-// public class ResourceAllocationController {
+    // 🔹 Primary Key
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     private final ResourceAllocationService allocationService;
+    // 🔹 Many Allocations → One Resource
+    @ManyToOne
+    @JoinColumn(name = "resource_id", nullable = false)
+    private Resource resource;
 
-//     public ResourceAllocationController(ResourceAllocationService allocationService) {
-//         this.allocationService = allocationService;
-//     }
+    // 🔹 One Allocation → One Request (UNIQUE)
+    @OneToOne
+    @JoinColumn(name = "request_id", unique = true, nullable = false)
+    private ResourceRequest resourceRequest;
 
-//     @PostMapping("/auto/{requestId}")
-//     public ResourceAllocation autoAllocate(@PathVariable Long requestId) {
-//         return allocationService.autoAllocate(requestId);
-//     }
+    // 🔹 Allocation time (auto)
+    private LocalDateTime allocatedAt;
 
-//     @GetMapping
-//     public List<ResourceAllocation> getAll() {
-//         return allocationService.getAllAllocations();
-//     }
+    // 🔹 Conflict flag
+    private Boolean conflictFlag;
 
-//     @GetMapping("/{id}")
-//     public ResourceAllocation getAllocation(@PathVariable Long id) {
-//         return allocationService.getAllocation(id);
-//     }
-// }
+    // 🔹 Notes
+    private String notes;
+
+    // 🔹 No-arg constructor
+    public ResourceAllocation() {
+    }
+
+    // 🔹 Parameterized constructor
+    public ResourceAllocation(
+            Resource resource,
+            ResourceRequest resourceRequest,
+            Boolean conflictFlag,
+            String notes) {
+
+        this.resource = resource;
+        this.resourceRequest = resourceRequest;
+        this.conflictFlag = conflictFlag;
+        this.notes = notes;
+    }
+
+    // 🔹 Automatically set allocatedAt
+    @PrePersist
+    private void onAllocate() {
+        this.allocatedAt = LocalDateTime.now();
+    }
+
+    // 🔹 Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
+    public ResourceRequest getResourceRequest() {
+        return resourceRequest;
+    }
+
+    public void setResourceRequest(ResourceRequest resourceRequest) {
+        this.resourceRequest = resourceRequest;
+    }
+
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
+
+    public Boolean getConflictFlag() {
+        return conflictFlag;
+    }
+
+    public void setConflictFlag(Boolean conflictFlag) {
+        this.conflictFlag = conflictFlag;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+}

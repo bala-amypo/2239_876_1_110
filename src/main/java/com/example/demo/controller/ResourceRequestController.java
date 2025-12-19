@@ -1,57 +1,72 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resource_allocations")
-public class ResourceAllocation {
+@Table(name = "resource_requests")
+public class ResourceRequest {
 
     // 🔹 Primary Key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔹 Many Allocations → One Resource
+    // 🔹 Requested resource type
+    private String resourceType;
+
+    // 🔹 Many Requests → One User
     @ManyToOne
-    @JoinColumn(name = "resource_id", nullable = false)
-    private Resource resource;
+    @JoinColumn(name = "requested_by_id", nullable = false)
+    private User requestedBy;
 
-    // 🔹 One Allocation → One Request (UNIQUE)
-    @OneToOne
-    @JoinColumn(name = "request_id", unique = true, nullable = false)
-    private ResourceRequest resourceRequest;
+    // 🔹 Start time
+    private LocalDateTime startTime;
 
-    // 🔹 Allocation time (auto)
-    private LocalDateTime allocatedAt;
+    // 🔹 End time
+    private LocalDateTime endTime;
 
-    // 🔹 Conflict flag
-    private Boolean conflictFlag;
+    // 🔹 Purpose (Mandatory)
+    @NotBlank(message = "Purpose is required")
+    private String purpose;
 
-    // 🔹 Notes
-    private String notes;
+    // 🔹 Status: PENDING / APPROVED / REJECTED
+    private String status;
+
+    // 🔹 One Request → One Allocation
+    @OneToOne(mappedBy = "resourceRequest", cascade = CascadeType.ALL)
+    private ResourceAllocation resourceAllocation;
 
     // 🔹 No-arg constructor
-    public ResourceAllocation() {
+    public ResourceRequest() {
+        this.status = "PENDING"; // default status
     }
 
     // 🔹 Parameterized constructor
-    public ResourceAllocation(
-            Resource resource,
-            ResourceRequest resourceRequest,
-            Boolean conflictFlag,
-            String notes) {
+    public ResourceRequest(
+            String resourceType,
+            User requestedBy,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            String purpose,
+            String status) {
 
-        this.resource = resource;
-        this.resourceRequest = resourceRequest;
-        this.conflictFlag = conflictFlag;
-        this.notes = notes;
+        this.resourceType = resourceType;
+        this.requestedBy = requestedBy;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.purpose = purpose;
+        this.status = (status == null || status.isEmpty()) ? "PENDING" : status;
     }
 
-    // 🔹 Automatically set allocatedAt
+    // 🔹 Business rule: startTime < endTime
     @PrePersist
-    private void onAllocate() {
-        this.allocatedAt = LocalDateTime.now();
+    @PreUpdate
+    private void validateTime() {
+        if (startTime != null && endTime != null && !startTime.isBefore(endTime)) {
+            throw new RuntimeException("Start time must be before end time");
+        }
     }
 
     // 🔹 Getters and Setters
@@ -59,39 +74,59 @@ public class ResourceAllocation {
         return id;
     }
 
-    public Resource getResource() {
-        return resource;
+    public String getResourceType() {
+        return resourceType;
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
     }
 
-    public ResourceRequest getResourceRequest() {
-        return resourceRequest;
+    public User getRequestedBy() {
+        return requestedBy;
     }
 
-    public void setResourceRequest(ResourceRequest resourceRequest) {
-        this.resourceRequest = resourceRequest;
+    public void setRequestedBy(User requestedBy) {
+        this.requestedBy = requestedBy;
     }
 
-    public LocalDateTime getAllocatedAt() {
-        return allocatedAt;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public Boolean getConflictFlag() {
-        return conflictFlag;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public void setConflictFlag(Boolean conflictFlag) {
-        this.conflictFlag = conflictFlag;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public String getNotes() {
-        return notes;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public ResourceAllocation getResourceAllocation() {
+        return resourceAllocation;
+    }
+
+    public void setResourceAllocation(ResourceAllocation resourceAllocation) {
+        this.resourceAllocation = resourceAllocation;
     }
 }

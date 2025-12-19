@@ -4,17 +4,22 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "resource_allocations")
 public class ResourceAllocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    // Many allocations can refer to one resource
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resource_id", nullable = false)
     private Resource resource;
 
-    @OneToOne
-    private ResourceRequest request;
+    // One allocation per request
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id", unique = true, nullable = false)
+    private ResourceRequest resourceRequest;
 
     private LocalDateTime allocatedAt;
 
@@ -22,15 +27,19 @@ public class ResourceAllocation {
 
     private String notes;
 
-    public ResourceAllocation() {}
+    // No-arg constructor
+    public ResourceAllocation() {
+    }
 
-    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
+    // Parameterized constructor
+    public ResourceAllocation(Resource resource, ResourceRequest resourceRequest, Boolean conflictFlag, String notes) {
         this.resource = resource;
-        this.request = request;
+        this.resourceRequest = resourceRequest;
         this.conflictFlag = conflictFlag;
         this.notes = notes;
     }
 
+    // Automatically set allocatedAt before saving
     @PrePersist
     public void prePersist() {
         this.allocatedAt = LocalDateTime.now();
@@ -53,20 +62,16 @@ public class ResourceAllocation {
         this.resource = resource;
     }
 
-    public ResourceRequest getRequest() {
-        return request;
+    public ResourceRequest getResourceRequest() {
+        return resourceRequest;
     }
 
-    public void setRequest(ResourceRequest request) {
-        this.request = request;
+    public void setResourceRequest(ResourceRequest resourceRequest) {
+        this.resourceRequest = resourceRequest;
     }
 
     public LocalDateTime getAllocatedAt() {
         return allocatedAt;
-    }
-
-    public void setAllocatedAt(LocalDateTime allocatedAt) {
-        this.allocatedAt = allocatedAt;
     }
 
     public Boolean getConflictFlag() {

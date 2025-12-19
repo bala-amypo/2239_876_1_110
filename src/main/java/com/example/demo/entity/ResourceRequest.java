@@ -1,56 +1,18 @@
-package com.example.demo.entity;
+package com.example.demo.repository;
 
-import jakarta.persistence.*;
+import com.example.demo.entity.ResourceRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
-public class ResourceRequest {
+@Repository
+public interface ResourceRequestRepository extends JpaRepository<ResourceRequest, Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // Find all requests made by a specific user
+    List<ResourceRequest> findByRequestedById(Long userId);
 
-    private String resourceType;
-
-    @ManyToOne
-    private User requestedBy;
-
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String purpose;
-    private String status = "PENDING";
-
-    public ResourceRequest() {}
-
-    public ResourceRequest(String resourceType, User requestedBy, LocalDateTime startTime,
-                           LocalDateTime endTime, String purpose, String status) {
-        this.resourceType = resourceType;
-        this.requestedBy = requestedBy;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.purpose = purpose;
-        this.status = status != null ? status : "PENDING";
-    }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getResourceType() { return resourceType; }
-    public void setResourceType(String resourceType) { this.resourceType = resourceType; }
-
-    public User getRequestedBy() { return requestedBy; }
-    public void setRequestedBy(User requestedBy) { this.requestedBy = requestedBy; }
-
-    public LocalDateTime getStartTime() { return startTime; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
-
-    public LocalDateTime getEndTime() { return endTime; }
-    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
-
-    public String getPurpose() { return purpose; }
-    public void setPurpose(String purpose) { this.purpose = purpose; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    // Find all requests within a specific time range
+    List<ResourceRequest> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 }

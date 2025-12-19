@@ -85,4 +85,16 @@ public class User {
     public void setResourceRequests(List<ResourceRequest> resourceRequests) {
         this.resourceRequests = resourceRequests;
     }
+       public User() {
+        this.createdAt = LocalDateTime.now();
+        this.role = "USER"; // default role
+    }
+
+    // 🔹 Parameterized constructor
+    public User(String fullName, String email, String role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.role = (role == null || role.isEmpty()) ? "USER" : role;
+        this.createdAt = LocalDateTime.now();
+    }
 }

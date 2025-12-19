@@ -1,42 +1,59 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Table(name = "resources")
 public class Resource {
 
+    // 🔹 Primary Key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    // 🔹 Resource Name (Unique)
+    @Column(unique = true, nullable = false)
     private String resourceName;
 
+    // 🔹 Resource Type (Mandatory)
+    @NotBlank(message = "Resource type is mandatory")
     private String resourceType;
 
+    // 🔹 Capacity (Must be >= 1)
+    @Min(value = 1, message = "Capacity must be at least 1")
     private Integer capacity;
 
+    // 🔹 Location
     private String location;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    // 🔹 Created Time
+    private LocalDateTime createdAt;
 
-    public Resource() {}
+    // 🔹 One Resource → Many ResourceAllocations
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
+    private List<ResourceAllocation> allocations;
 
+    // 🔹 No-arg constructor
+    public Resource() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // 🔹 Parameterized constructor
     public Resource(String resourceName, String resourceType, Integer capacity, String location) {
         this.resourceName = resourceName;
         this.resourceType = resourceType;
         this.capacity = capacity;
         this.location = location;
+        this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    // 🔹 Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getResourceName() {
@@ -75,7 +92,11 @@ public class Resource {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public List<ResourceAllocation> getAllocations() {
+        return allocations;
+    }
+
+    public void setAllocations(List<ResourceAllocation> allocations) {
+        this.allocations = allocations;
     }
 }

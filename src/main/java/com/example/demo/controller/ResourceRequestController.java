@@ -1,42 +1,97 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.ResourceRequest;
-import com.example.demo.service.ResourceRequestService;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-import java.util.List;
+@Entity
+@Table(name = "resource_allocations")
+public class ResourceAllocation {
 
-@RestController
-@RequestMapping("/api/requests")
-public class ResourceRequestController {
+    // 🔹 Primary Key
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final ResourceRequestService requestService;
+    // 🔹 Many Allocations → One Resource
+    @ManyToOne
+    @JoinColumn(name = "resource_id", nullable = false)
+    private Resource resource;
 
-    public ResourceRequestController(ResourceRequestService requestService) {
-        this.requestService = requestService;
+    // 🔹 One Allocation → One Request (UNIQUE)
+    @OneToOne
+    @JoinColumn(name = "request_id", unique = true, nullable = false)
+    private ResourceRequest resourceRequest;
+
+    // 🔹 Allocation time (auto)
+    private LocalDateTime allocatedAt;
+
+    // 🔹 Conflict flag
+    private Boolean conflictFlag;
+
+    // 🔹 Notes
+    private String notes;
+
+    // 🔹 No-arg constructor
+    public ResourceAllocation() {
     }
 
-    @PostMapping("/{userId}")
-    public ResourceRequest createRequest(
-            @PathVariable Long userId,
-            @RequestBody ResourceRequest request) {
-        return requestService.createRequest(userId, request);
+    // 🔹 Parameterized constructor
+    public ResourceAllocation(
+            Resource resource,
+            ResourceRequest resourceRequest,
+            Boolean conflictFlag,
+            String notes) {
+
+        this.resource = resource;
+        this.resourceRequest = resourceRequest;
+        this.conflictFlag = conflictFlag;
+        this.notes = notes;
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ResourceRequest> getByUser(@PathVariable Long userId) {
-        return requestService.getRequestsByUser(userId);
+    // 🔹 Automatically set allocatedAt
+    @PrePersist
+    private void onAllocate() {
+        this.allocatedAt = LocalDateTime.now();
     }
 
-    @GetMapping("/{id}")
-    public ResourceRequest getRequest(@PathVariable Long id) {
-        return requestService.getRequest(id);
+    // 🔹 Getters and Setters
+    public Long getId() {
+        return id;
     }
 
-    @PutMapping("/status/{requestId}")
-    public ResourceRequest updateStatus(
-            @PathVariable Long requestId,
-            @RequestParam String status) {
-        return requestService.updateRequestStatus(requestId, status);
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
+    public ResourceRequest getResourceRequest() {
+        return resourceRequest;
+    }
+
+    public void setResourceRequest(ResourceRequest resourceRequest) {
+        this.resourceRequest = resourceRequest;
+    }
+
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
+
+    public Boolean getConflictFlag() {
+        return conflictFlag;
+    }
+
+    public void setConflictFlag(Boolean conflictFlag) {
+        this.conflictFlag = conflictFlag;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

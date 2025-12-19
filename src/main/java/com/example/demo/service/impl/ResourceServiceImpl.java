@@ -1,44 +1,50 @@
-// package com.example.demo.service.impl;
+package com.example.demo.service.impl;
 
-// import com.example.demo.entity.Resource;
-// import com.example.demo.exception.ValidationException;
-// import com.example.demo.repository.ResourceRepository;
-// import com.example.demo.service.ResourceService;
-// import org.springframework.stereotype.Service;
+import com.example.demo.entity.Resource;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.ValidationException;
+import com.example.demo.repository.ResourceRepository;
+import com.example.demo.service.ResourceService;
 
-// import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-// @Service
-// public class ResourceServiceImpl implements ResourceService {
+import java.util.List;
 
-//     private final ResourceRepository resourceRepository;
+@Service
+public class ResourceServiceImpl implements ResourceService {
 
-//     // constructor injection (order matters)
-//     public ResourceServiceImpl(ResourceRepository resourceRepository) {
-//         this.resourceRepository = resourceRepository;
-//     }
+    @Autowired
+    private ResourceRepository resourceRepository;
 
-//     @Override
-//     public Resource createResource(Resource resource) {
-//         if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-//             throw new ValidationException("resource exists");
-//         }
-//         if (resource.getCapacity() == null || resource.getCapacity() < 1) {
-//             throw new ValidationException("capacity must be >= 1");
-//         }
-//         if (resource.getResourceType() == null) {
-//             throw new ValidationException("resourceType required");
-//         }
-//         return resourceRepository.save(resource);
-//     }
+    @Override
+    public Resource createResource(Resource resource) {
+        // Validate resourceType
+        if (resource.getResourceType() == null || resource.getResourceType().isBlank()) {
+            throw new ValidationException("Resource type is required");
+        }
 
-//     @Override
-//     public Resource getResource(Long id) {
-//         return resourceRepository.findById(id).orElse(null);
-//     }
+        // Validate capacity
+        if (resource.getCapacity() == null || resource.getCapacity() < 1) {
+            throw new ValidationException("Capacity must be at least 1");
+        }
 
-//     @Override
-//     public List<Resource> getAllResources() {
-//         return resourceRepository.findAll();
-//     }
-// }
+        // Check for duplicate resource name
+        if (resourceRepository.existsByResourceName(resource.getResourceName())) {
+            throw new ValidationException("Resource name already exists: " + resource.getResourceName());
+        }
+
+        return resourceRepository.save(resource);
+    }
+
+    @Override
+    public Resource getResource(Long id) {
+        return resourceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
+    }
+
+    @Override
+    public List<Resource> getAllResources() {
+        return resourceRepository.findAll();
+    }
+}

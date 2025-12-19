@@ -26,21 +26,6 @@ public class User {
     // 🔹 One User → Many ResourceRequests
     @OneToMany(mappedBy = "requestedBy", cascade = CascadeType.ALL)
     private List<ResourceRequest> resourceRequests;
-
-    // 🔹 No-arg constructor
-    public User() {
-        this.createdAt = LocalDateTime.now();
-        this.role = "USER"; // default role
-    }
-
-    // 🔹 Parameterized constructor
-    public User(String fullName, String email, String role) {
-        this.fullName = fullName;
-        this.email = email;
-        this.role = (role == null || role.isEmpty()) ? "USER" : role;
-        this.createdAt = LocalDateTime.now();
-    }
-
     // 🔹 Getters and Setters
     public Long getId() {
         return id;

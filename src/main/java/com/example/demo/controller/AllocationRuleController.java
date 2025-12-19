@@ -1,33 +1,78 @@
-// package com.example.demo.controller;
+package com.example.demo.entity;
 
-// import com.example.demo.entity.AllocationRule;
-// import com.example.demo.service.AllocationRuleService;
-// import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
-// import java.util.List;
+@Entity
+@Table(name = "allocation_rules")
+public class AllocationRule {
 
-// @RestController
-// @RequestMapping("/api/rules")
-// public class AllocationRuleController {
+    // 🔹 Primary Key
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     private final AllocationRuleService ruleService;
+    // 🔹 Rule Name (Unique)
+    @Column(unique = true, nullable = false)
+    private String ruleName;
 
-//     public AllocationRuleController(AllocationRuleService ruleService) {
-//         this.ruleService = ruleService;
-//     }
+    // 🔹 Rule Type (Mandatory)
+    @NotBlank(message = "Rule type is required")
+    private String ruleType; 
+    // FIRSTAVAILABLE, PRIORITYBASED, ROUNDROBIN
 
-//     @PostMapping
-//     public AllocationRule createRule(@RequestBody AllocationRule rule) {
-//         return ruleService.createRule(rule);
-//     }
+    // 🔹 Priority Weight (>= 0)
+    @Min(value = 0, message = "Priority weight must be at least 0")
+    private Integer priorityWeight;
 
-//     @GetMapping
-//     public List<AllocationRule> getAllRules() {
-//         return ruleService.getAllRules();
-//     }
+    // 🔹 Created Time
+    private LocalDateTime createdAt;
 
-//     @GetMapping("/{id}")
-//     public AllocationRule getRule(@PathVariable Long id) {
-//         return ruleService.getRule(id);
-//     }
-// }
+    // 🔹 No-arg constructor
+    public AllocationRule() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // 🔹 Parameterized constructor
+    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
+        this.ruleName = ruleName;
+        this.ruleType = ruleType;
+        this.priorityWeight = priorityWeight;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // 🔹 Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public String getRuleType() {
+        return ruleType;
+    }
+
+    public void setRuleType(String ruleType) {
+        this.ruleType = ruleType;
+    }
+
+    public Integer getPriorityWeight() {
+        return priorityWeight;
+    }
+
+    public void setPriorityWeight(Integer priorityWeight) {
+        this.priorityWeight = priorityWeight;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+}

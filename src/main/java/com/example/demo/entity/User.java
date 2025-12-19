@@ -8,25 +8,46 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-    // 🔹 Primary Key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔹 Fields
+    @Column(nullable = false)
     private String fullName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String role;
 
     private LocalDateTime createdAt;
 
-    // 🔹 One User → Many ResourceRequests
+    // One user can have many resource requests
     @OneToMany(mappedBy = "requestedBy", cascade = CascadeType.ALL)
     private List<ResourceRequest> resourceRequests;
-    // 🔹 Getters and Setters
+
+    // No-arg constructor
+    public User() {
+    }
+
+    // Parameterized constructor
+    public User(String fullName, String email, String role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.role = role;
+    }
+
+    // Set default values before insert
+    @PrePersist
+    public void prePersist() {
+        if (this.role == null || this.role.isEmpty()) {
+            this.role = "USER";
+        }
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -46,7 +67,7 @@ public class User {
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -54,9 +75,9 @@ public class User {
     public String getRole() {
         return role;
     }
-    
+
     public void setRole(String role) {
-        this.role = (role == null || role.isEmpty()) ? "USER" : role;
+        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -69,17 +90,5 @@ public class User {
 
     public void setResourceRequests(List<ResourceRequest> resourceRequests) {
         this.resourceRequests = resourceRequests;
-    }
-       public User() {
-        this.createdAt = LocalDateTime.now();
-        this.role = "USER"; // default role
-    }
-
-    // 🔹 Parameterized constructor
-    public User(String fullName, String email, String role) {
-        this.fullName = fullName;
-        this.email = email;
-        this.role = (role == null || role.isEmpty()) ? "USER" : role;
-        this.createdAt = LocalDateTime.now();
     }
 }

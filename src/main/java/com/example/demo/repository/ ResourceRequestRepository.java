@@ -1,13 +1,15 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Resource;
+import com.example.demo.entity.ResourceRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface ResourceRepository extends JpaRepository<Resource, Long> {
+public interface ResourceRequestRepository extends JpaRepository<ResourceRequest, Long> {
 
-    boolean existsByResourceName(String resourceName);
+    List<ResourceRequest> findByRequestedById(Long userId);
 
-    List<Resource> findByResourceType(String resourceType);
+    List<ResourceRequest> findByStartTimeBetween(LocalDateTime start,
+                                                 LocalDateTime end);
 }

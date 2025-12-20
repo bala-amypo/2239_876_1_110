@@ -18,11 +18,18 @@ public class Resource {
     @Column(nullable = false)
     private String resourceType;
 
+    @Column(nullable = false)
     private Integer capacity;
 
     private String location;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
     private List<ResourceAllocation> allocations;

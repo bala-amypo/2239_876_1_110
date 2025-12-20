@@ -38,7 +38,7 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
                 resourceRepository.findByResourceType(request.getResourceType());
 
         if (resources.isEmpty()) {
-            throw new IllegalArgumentException("No resource available for allocation");
+            throw new IllegalArgumentException("Resource allocation failed: no resource available");
         }
 
         ResourceAllocation allocation = new ResourceAllocation();

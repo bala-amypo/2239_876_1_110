@@ -1,24 +1,16 @@
 package com.example.demo.dto;
 
-public class AuthRequest {
+public class AuthRequestDTO {
 
     private String email;
     private String password;
 
-    // No-arg constructor
-    public AuthRequest() {}
+    public AuthRequestDTO() {}
 
-    // Parameterized constructor
-    public AuthRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    // Getters and Setters
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }

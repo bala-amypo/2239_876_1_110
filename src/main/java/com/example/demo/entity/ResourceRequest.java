@@ -2,7 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 
 @Entity
@@ -18,7 +18,7 @@ public class ResourceRequest {
 
     @ManyToOne
     @JoinColumn(name = "requested_by", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     private User requestedBy;
 
     @Column(nullable = false)

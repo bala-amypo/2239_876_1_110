@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 @Table(name = "resource_requests")
@@ -16,6 +18,7 @@ public class ResourceRequest {
 
     @ManyToOne
     @JoinColumn(name = "requested_by", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private User requestedBy;
 
     @Column(nullable = false)
@@ -27,6 +30,7 @@ public class ResourceRequest {
     @Column(nullable = false)
     private String purpose;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(nullable = false)
     private String status;
 

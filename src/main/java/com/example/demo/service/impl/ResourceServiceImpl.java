@@ -29,7 +29,7 @@ public class ResourceServiceImpl implements ResourceService {
         }
 
         if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-            throw new IllegalArgumentException("Resource name already exists");
+            throw new IllegalArgumentException("Resource name exists");
         }
 
         return resourceRepository.save(resource);

@@ -32,6 +32,7 @@ public class Resource {
     }
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ResourceAllocation> allocations;
 
     // No-arg constructor

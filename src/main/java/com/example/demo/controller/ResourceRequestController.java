@@ -14,10 +14,28 @@ public class ResourceRequestController {
         this.service = service;
     }
 
-    @PutMapping("/status/{id}")
+    @PostMapping("/{userId}")
+    public ResourceRequest createRequest(
+            @PathVariable Long userId,
+            @RequestBody ResourceRequest request) {
+        return service.createRequest(userId, request);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<ResourceRequest> getRequestsByUser(@PathVariable Long userId) {
+        return service.getRequestsByUser(userId);
+    }
+
+    @GetMapping("/{id}")
+    public ResourceRequest getRequest(@PathVariable Long id) {
+        return service.getRequest(id);
+    }
+
+    @PutMapping("/status/{requestId}")
     public ResourceRequest updateStatus(
-            @PathVariable Long id,
+            @PathVariable Long requestId,
             @RequestParam String status) {
-        return service.updateStatus(id, status);
+        return service.updateRequestStatus(requestId, status);
     }
 }
+

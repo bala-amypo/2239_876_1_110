@@ -43,7 +43,7 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
 
     @Override
     public List<ResourceRequest> getRequestsByUser(Long userId) {
-        return reqRepo.findByRequestedById(userId);
+        return reqRepo.findByRequestedBy_Id(userId);
     }
 
     @Override

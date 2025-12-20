@@ -17,7 +17,7 @@ public class ResourceRequest {
     private String resourceType;
 
     @ManyToOne
-    @JoinColumn(name = "requested_by", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User requestedBy;
 

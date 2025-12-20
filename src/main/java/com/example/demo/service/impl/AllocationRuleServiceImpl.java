@@ -21,7 +21,7 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
     public AllocationRule createRule(AllocationRule rule) {
 
         if (ruleRepository.existsByRuleName(rule.getRuleName())) {
-            throw new IllegalArgumentException("Rule already exists");
+            throw new IllegalArgumentException("Rule name already exists");
         }
 
         if (rule.getPriorityWeight() == null || rule.getPriorityWeight() < 0) {

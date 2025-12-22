@@ -35,7 +35,7 @@ public class ResourceAllocationServiceImpl
                         new ResourceNotFoundException("Request not found"));
 
         Resource resource = resourceRepository
-                .findFirstByResourceType(request.getResourceType())
+                .findFirstByType(request.getResourceType())
                 .orElseThrow(() ->
                         new IllegalArgumentException("No resource available"));
 

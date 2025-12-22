@@ -20,7 +20,7 @@ public class ResourceAllocation {
 
     private boolean conflictFlag;
 
-    // ---------- GETTERS ----------
+    
     public Long getId() {
         return id;
     }

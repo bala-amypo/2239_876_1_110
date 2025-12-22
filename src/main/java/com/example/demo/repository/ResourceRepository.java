@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
-    Optional<Resource> findFirstByResourceType(String resourceType);
-
     boolean existsByResourceName(String resourceName);
+
+    Optional<Resource> findFirstByResourceType(String resourceType);
 }

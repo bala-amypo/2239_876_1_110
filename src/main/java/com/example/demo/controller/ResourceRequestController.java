@@ -17,26 +17,24 @@ public class ResourceRequestController {
         this.service = service;
     }
 
-    // Create a new resource request for a user
+   
     @PostMapping("/{userId}")
     public ApiResponse createRequest(@PathVariable Long userId, @RequestBody ResourceRequest request) {
         ResourceRequest created = service.createRequest(userId, request);
         return new ApiResponse(true, "Request created successfully", created);
     }
 
-    // Get a single request by ID
+   
     @GetMapping("/{id}")
     public ResourceRequest getRequest(@PathVariable Long id) {
         return service.getRequest(id);
     }
 
-    // Get all requests for a specific user
     @GetMapping("/user/{userId}")
     public List<ResourceRequest> getRequestsByUser(@PathVariable Long userId) {
         return service.getRequestsByUser(userId);
     }
 
-    // Update status of a request
     @PutMapping("/status/{requestId}")
     public ApiResponse updateRequestStatus(@PathVariable Long requestId, @RequestParam String status) {
         ResourceRequest updated = service.updateRequestStatus(requestId, status);

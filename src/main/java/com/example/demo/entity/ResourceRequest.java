@@ -54,11 +54,11 @@ public class ResourceRequest {
         return id;
     }
 
-    public String getResourceType() {   // ✅ ADD THIS
+    public String getResourceType() {   
         return resourceType;
     }
 
-    public void setResourceType(String resourceType) { // ✅ ADD THIS
+    public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
 

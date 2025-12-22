@@ -31,18 +31,18 @@ public class User {
     @OneToMany(mappedBy = "requestedBy", cascade = CascadeType.ALL)
     private List<ResourceRequest> resourceRequests;
 
-    // No-arg constructor
+   
     public User() {
     }
 
-    // Parameterized constructor
+  
     public User(String fullName, String email, String role) {
         this.fullName = fullName;
         this.email = email;
         this.role = role;
     }
 
-    // Getters and Setters
+   
     public Long getId() {
         return id;
     }

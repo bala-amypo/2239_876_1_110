@@ -27,17 +27,17 @@ public class AllocationRule {
         this.createdAt = LocalDateTime.now();
     }
 
-    // No-arg constructor
+   
     public AllocationRule() {}
 
-    // Parameterized constructor
+  
     public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
         this.ruleName = ruleName;
         this.ruleType = ruleType;
         this.priorityWeight = priorityWeight;
     }
 
-    // Getters and Setters
+  
     public Long getId() {
         return id;
     }

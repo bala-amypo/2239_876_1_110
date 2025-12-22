@@ -31,4 +31,17 @@ public class ResourceServiceImpl implements ResourceService {
                 saved.getType()
         );
     }
+
+    @Override
+    public ResourceResponseDto getResourceById(Long id) {
+
+        Resource resource = resourceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        return new ResourceResponseDto(
+                resource.getId(),
+                resource.getName(),
+                resource.getType()
+        );
+    }
 }

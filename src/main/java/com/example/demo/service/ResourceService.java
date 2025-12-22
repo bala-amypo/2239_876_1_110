@@ -1,15 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Resource;
-
-import java.util.List;
+import com.example.demo.dto.ResourceRequestDto;
+import com.example.demo.dto.ResourceResponseDto;
 
 public interface ResourceService {
 
-    Resource createResource(Resource resource);
+    ResourceResponseDto createResource(ResourceRequestDto requestDto);
 
-    List<Resource> getAllResources();
-
-    Resource getResourceById(Long id);
-
+    ResourceResponseDto getResourceById(Long id);
 }

@@ -1,13 +1,23 @@
-package com.example.demo.service;
+package com.example.demo.controller;
 
 import com.example.demo.entity.ResourceAllocation;
-import java.util.List;
+import com.example.demo.service.ResourceAllocationService;
 
-public interface ResourceAllocationService {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    ResourceAllocation autoAllocate(Long requestId);
+@RestController
+@RequestMapping("/api/allocations")
+public class ResourceAllocationController {
 
-    ResourceAllocation getAllocation(Long id);
+    @Autowired
+    private ResourceAllocationService allocationService;
 
-    List<ResourceAllocation> getAllAllocations();
+    @PostMapping("/auto/{requestId}")
+    public ResponseEntity<ResourceAllocation> autoAllocate(
+            @PathVariable Long requestId) {
+
+        return ResponseEntity.ok(allocationService.autoAllocate(requestId));
+    }
 }

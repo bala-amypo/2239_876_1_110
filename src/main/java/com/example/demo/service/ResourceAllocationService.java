@@ -1,3 +1,18 @@
+package com.example.demo.service;
+
+import com.example.demo.entity.Resource;
+import com.example.demo.entity.ResourceRequest;
+import com.example.demo.entity.ResourceAllocation;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.ResourceRequestRepository;
+import com.example.demo.repository.ResourceRepository;
+import com.example.demo.repository.ResourceAllocationRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+
 @Service
 public class ResourceAllocationService {
 
@@ -16,7 +31,7 @@ public class ResourceAllocationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Request not found"));
 
         if (!"PENDING".equals(request.getStatus())) {
-            throw new IllegalArgumentException("Request is not pending");
+            throw new IllegalArgumentException("Request is not PENDING");
         }
 
         Resource resource = resourceRepository

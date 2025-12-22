@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resource_allocations")
 public class ResourceAllocation {
 
     @Id
@@ -12,37 +11,16 @@ public class ResourceAllocation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "resource_id")
     private Resource resource;
 
-    @OneToOne
-    @JoinColumn(name = "request_id", unique = true)
+    @ManyToOne
     private ResourceRequest request;
 
     private LocalDateTime allocatedAt;
 
-    private Boolean conflictFlag;
+    private boolean conflictFlag;
 
-    private String notes;
-
-    // No-arg constructor
-    public ResourceAllocation() {}
-
-    // Parameterized constructor
-    public ResourceAllocation(Resource resource, ResourceRequest request,
-                              Boolean conflictFlag, String notes) {
-        this.resource = resource;
-        this.request = request;
-        this.conflictFlag = conflictFlag;
-        this.notes = notes;
-    }
-
-    @PrePersist
-    public void onAllocate() {
-        this.allocatedAt = LocalDateTime.now();
-    }
-
-    // Getters and Setters
+    // ---------- GETTERS ----------
     public Long getId() {
         return id;
     }
@@ -51,6 +29,19 @@ public class ResourceAllocation {
         return resource;
     }
 
+    public ResourceRequest getRequest() {
+        return request;
+    }
+
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
+
+    public boolean isConflictFlag() {
+        return conflictFlag;
+    }
+
+    // ---------- SETTERS ----------
     public void setId(Long id) {
         this.id = id;
     }
@@ -59,31 +50,15 @@ public class ResourceAllocation {
         this.resource = resource;
     }
 
-    public ResourceRequest getRequest() {
-        return request;
-    }
-
     public void setRequest(ResourceRequest request) {
         this.request = request;
     }
 
-    public LocalDateTime getAllocatedAt() {
-        return allocatedAt;
+    public void setAllocatedAt(LocalDateTime allocatedAt) {
+        this.allocatedAt = allocatedAt;
     }
 
-    public Boolean getConflictFlag() {
-        return conflictFlag;
-    }
-
-    public void setConflictFlag(Boolean conflictFlag) {
+    public void setConflictFlag(boolean conflictFlag) {
         this.conflictFlag = conflictFlag;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-    
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }

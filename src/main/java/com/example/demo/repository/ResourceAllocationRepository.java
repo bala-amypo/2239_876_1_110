@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.ResourceAllocation;
+import com.example.demo.entity.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ResourceAllocationRepository
-        extends JpaRepository<ResourceAllocation, Long> {
-    // No extra methods required
+import java.util.Optional;
+
+public interface ResourceRepository extends JpaRepository<Resource, Long> {
+
+    Optional<Resource> findFirstByResourceType(String resourceType);
 }

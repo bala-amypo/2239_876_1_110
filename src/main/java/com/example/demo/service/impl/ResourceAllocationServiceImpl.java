@@ -8,24 +8,24 @@ import com.example.demo.repository.ResourceAllocationRepository;
 import com.example.demo.repository.ResourceRepository;
 import com.example.demo.repository.ResourceRequestRepository;
 import com.example.demo.service.ResourceAllocationService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
-public class ResourceAllocationServiceImpl implements ResourceAllocationService {
+public class ResourceAllocationServiceImpl 
+        implements ResourceAllocationService {
 
-    private final ResourceRequestRepository requestRepository;
-    private final ResourceRepository resourceRepository;
-    private final ResourceAllocationRepository allocationRepository;
+    @Autowired
+    private ResourceRequestRepository requestRepository;
 
-    public ResourceAllocationServiceImpl(ResourceRequestRepository requestRepository,
-                                         ResourceRepository resourceRepository,
-                                         ResourceAllocationRepository allocationRepository) {
-        this.requestRepository = requestRepository;
-        this.resourceRepository = resourceRepository;
-        this.allocationRepository = allocationRepository;
-    }
+    @Autowired
+    private ResourceRepository resourceRepository;
+
+    @Autowired
+    private ResourceAllocationRepository allocationRepository;
 
     @Override
     public ResourceAllocation autoAllocate(Long requestId) {
@@ -34,31 +34,51 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Request not found"));
 
-        List<Resource> resources =
-                resourceRepository.findByResourceType(request.getResourceType());
-
-        if (resources.isEmpty()) {
-            throw new IllegalArgumentException("Resource allocation failed: no resource available");
-        }
+        Resource resource = resourceRepository
+                .findFirstByResourceType(request.getResourceType())
+                .orElseThrow(() ->
+                        new IllegalArgumentException("No resource available"));
 
         ResourceAllocation allocation = new ResourceAllocation();
         allocation.setRequest(request);
-        allocation.setResource(resources.get(0));
+        allocation.setResource(resource);
+        allocation.setAllocatedAt(LocalDateTime.now());
         allocation.setConflictFlag(false);
-        allocation.setNotes("Auto allocated");
+
+        request.setStatus("ALLOCATED");
 
         return allocationRepository.save(allocation);
     }
 
     @Override
-    public ResourceAllocation getAllocation(Long id) {
-        return allocationRepository.findById(id)
+    public ResourceAllocation manualAllocate(Long requestId, Long resourceId) {
+
+        ResourceRequest request = requestRepository.findById(requestId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Allocation not found"));
+                        new ResourceNotFoundException("Request not found"));
+
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Resource not found"));
+
+        ResourceAllocation allocation = new ResourceAllocation();
+        allocation.setRequest(request);
+        allocation.setResource(resource);
+        allocation.setAllocatedAt(LocalDateTime.now());
+        allocation.setConflictFlag(false);
+
+        request.setStatus("ALLOCATED");
+
+        return allocationRepository.save(allocation);
     }
 
     @Override
-    public List<ResourceAllocation> getAllAllocations() {
-        return allocationRepository.findAll();
+    public void releaseAllocation(Long allocationId) {
+
+        ResourceAllocation allocation = allocationRepository.findById(allocationId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Allocation not found"));
+
+        allocationRepository.delete(allocation);
     }
 }

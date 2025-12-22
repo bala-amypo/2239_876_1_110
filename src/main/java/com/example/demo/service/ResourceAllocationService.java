@@ -1,13 +1,36 @@
-package com.example.demo.service;
+@Service
+public class ResourceAllocationService {
 
-import com.example.demo.entity.ResourceAllocation;
-import java.util.List;
+    @Autowired
+    private ResourceRequestRepository requestRepository;
 
-public interface ResourceAllocationService {
+    @Autowired
+    private ResourceRepository resourceRepository;
 
-    ResourceAllocation autoAllocate(Long requestId);
+    @Autowired
+    private ResourceAllocationRepository allocationRepository;
 
-    ResourceAllocation getAllocation(Long id);
+    public ResourceAllocation autoAllocate(Long requestId) {
 
-    List<ResourceAllocation> getAllAllocations();
+        ResourceRequest request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Request not found"));
+
+        if (!"PENDING".equals(request.getStatus())) {
+            throw new IllegalArgumentException("Request is not pending");
+        }
+
+        Resource resource = resourceRepository
+                .findFirstByResourceType(request.getResourceType())
+                .orElseThrow(() -> new IllegalArgumentException("No resource available"));
+
+        ResourceAllocation allocation = new ResourceAllocation();
+        allocation.setRequest(request);
+        allocation.setResource(resource);
+        allocation.setAllocatedAt(LocalDateTime.now());
+        allocation.setConflictFlag(false);
+
+        request.setStatus("ALLOCATED");
+
+        return allocationRepository.save(allocation);
+    }
 }

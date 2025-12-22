@@ -12,7 +12,4 @@ public interface ResourceService {
 
     Resource getResourceById(Long id);
 
-    Resource updateResource(Long id, Resource resource);
-
-    void deleteResource(Long id);
 }

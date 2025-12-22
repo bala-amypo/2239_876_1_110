@@ -35,26 +35,4 @@ public class ResourceServiceImpl implements ResourceService {
                         new ResourceNotFoundException("Resource not found"));
     }
 
-    @Override
-    public Resource updateResource(Long id, Resource resource) {
-
-        Resource existing = resourceRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Resource not found"));
-
-        existing.setResourceName(resource.getResourceName());
-        existing.setResourceType(resource.getResourceType());
-        existing.setCapacity(resource.getCapacity());
-        existing.setLocation(resource.getLocation());
-
-        return resourceRepository.save(existing);
-    }
-
-    @Override
-    public void deleteResource(Long id) {
-        Resource resource = resourceRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Resource not found"));
-        resourceRepository.delete(resource);
-    }
-}
+  

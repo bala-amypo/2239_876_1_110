@@ -4,6 +4,7 @@ import com.example.demo.entity.Resource;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ResourceRepository;
 import com.example.demo.service.ResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,39 +12,49 @@ import java.util.List;
 @Service
 public class ResourceServiceImpl implements ResourceService {
 
-    private final ResourceRepository resourceRepository;
-
-    public ResourceServiceImpl(ResourceRepository resourceRepository) {
-        this.resourceRepository = resourceRepository;
-    }
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     @Override
     public Resource createResource(Resource resource) {
-
-        if (resource.getResourceType() == null || resource.getResourceType().isEmpty()) {
-            throw new IllegalArgumentException("Resource type is required");
-        }
-
-        if (resource.getCapacity() == null || resource.getCapacity() < 1) {
-            throw new IllegalArgumentException("Capacity must be at least 1");
-        }
-
         if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-            throw new IllegalArgumentException("Resource name exists");
+            throw new IllegalArgumentException("Resource name already exists");
         }
-
         return resourceRepository.save(resource);
     }
 
     @Override
-    public Resource getResource(Long id) {
+    public List<Resource> getAllResources() {
+        return resourceRepository.findAll();
+    }
+
+    @Override
+    public Resource getResourceById(Long id) {
         return resourceRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Resource not found"));
     }
 
     @Override
-    public List<Resource> getAllResources() {
-        return resourceRepository.findAll();
+    public Resource updateResource(Long id, Resource resource) {
+
+        Resource existing = resourceRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Resource not found"));
+
+        existing.setResourceName(resource.getResourceName());
+        existing.setResourceType(resource.getResourceType());
+        existing.setCapacity(resource.getCapacity());
+        existing.setLocation(resource.getLocation());
+
+        return resourceRepository.save(existing);
+    }
+
+    @Override
+    public void deleteResource(Long id) {
+        Resource resource = resourceRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Resource not found"));
+        resourceRepository.delete(resource);
     }
 }

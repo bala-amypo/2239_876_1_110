@@ -1,38 +1,34 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.ResourceRequestDto;
+import com.example.demo.dto.ResourceResponseDto;
 import com.example.demo.entity.Resource;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ResourceRepository;
 import com.example.demo.service.ResourceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
 
-    @Autowired
-    private ResourceRepository resourceRepository;
+    private final ResourceRepository resourceRepository;
 
-    @Override
-    public Resource createResource(Resource resource) {
-        if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-            throw new IllegalArgumentException("Resource name already exists");
-        }
-        return resourceRepository.save(resource);
+    public ResourceServiceImpl(ResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
     }
 
     @Override
-    public List<Resource> getAllResources() {
-        return resourceRepository.findAll();
-    }
+    public ResourceResponseDto createResource(ResourceRequestDto requestDto) {
 
-    @Override
-    public Resource getResourceById(Long id) {
-        return resourceRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Resource not found"));
-    }
+        Resource resource = new Resource();
+        resource.setName(requestDto.getName());
+        resource.setType(requestDto.getType());
 
-  
+        Resource saved = resourceRepository.save(resource);
+
+        return new ResourceResponseDto(
+                saved.getId(),
+                saved.getName(),
+                saved.getType()
+        );
+    }
+}

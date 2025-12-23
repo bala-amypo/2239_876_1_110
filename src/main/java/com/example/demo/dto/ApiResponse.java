@@ -7,8 +7,7 @@ public class ApiResponse<T> {
     private T data;
 
     // No-arg constructor
-    public ApiResponse() {
-    }
+    public ApiResponse() {}
 
     // Constructor without data
     public ApiResponse(boolean success, String message) {
@@ -23,28 +22,26 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    // Static factory methods for convenience
+    public static <T> ApiResponse<T> success(String message) {
+        return new ApiResponse<>(true, message);
+    }
+
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(true, message, data);
+    }
+
+    public static <T> ApiResponse<T> error(String message) {
+        return new ApiResponse<>(false, message);
+    }
+
     // Getters and Setters
-    public boolean isSuccess() {
-        return success;
-    }
+    public boolean isSuccess() { return success; }
+    public void setSuccess(boolean success) { this.success = success; }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
+    public T getData() { return data; }
+    public void setData(T data) { this.data = data; }
 }

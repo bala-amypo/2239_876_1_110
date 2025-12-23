@@ -7,8 +7,9 @@ public interface ResourceRequestService {
 
     ResourceRequest createRequest(Long userId, ResourceRequest request);
 
-    List<ResourceRequest> getRequests(Long userId);
+    List<ResourceRequest> getRequestsByUser(Long userId);
 
-    // 🔧 FIXED
+    ResourceRequest getRequest(Long id);
+
     ResourceRequest updateRequestStatus(Long requestId, String status);
 }

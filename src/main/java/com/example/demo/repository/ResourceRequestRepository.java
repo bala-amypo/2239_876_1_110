@@ -1,17 +1,18 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Resource;
+import com.example.demo.entity.ResourceRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ResourceRepository extends JpaRepository<Resource, Long> {
+public interface ResourceRequestRepository extends JpaRepository<ResourceRequest, Long> {
 
-    // Check if a resource with the given name already exists
-    boolean existsByResourceName(String resourceName);
+    // Get all resource requests made by a specific user
+    List<ResourceRequest> findByRequestedById(Long userId);
 
-    // Get all resources of a specific type
-    List<Resource> findByResourceType(String resourceType);
+    // Get all resource requests within a time range
+    List<ResourceRequest> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 }

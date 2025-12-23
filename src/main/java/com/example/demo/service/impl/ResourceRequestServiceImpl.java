@@ -29,8 +29,9 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
         return Collections.emptyList();
     }
 
+    // 🔧 FIXED
     @Override
-    public void updateRequestStatus(Long requestId, String status) {
-        // stub
+    public ResourceRequest updateRequestStatus(Long requestId, String status) {
+        return new ResourceRequest();
     }
 }

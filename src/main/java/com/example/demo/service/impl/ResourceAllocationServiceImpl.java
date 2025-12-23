@@ -11,11 +11,17 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
     private final ResourceRepository resourceRepository;
     private final ResourceAllocationRepository allocationRepository;
 
-    public ResourceAllocationServiceImpl(ResourceRequestRepository requestRepository,
-                                         ResourceRepository resourceRepository,
-                                         ResourceAllocationRepository allocationRepository) {
+    public ResourceAllocationServiceImpl(
+            ResourceRequestRepository requestRepository,
+            ResourceRepository resourceRepository,
+            ResourceAllocationRepository allocationRepository) {
         this.requestRepository = requestRepository;
         this.resourceRepository = resourceRepository;
         this.allocationRepository = allocationRepository;
+    }
+
+    @Override
+    public void autoAllocate(Long requestId) {
+        // stub implementation
     }
 }

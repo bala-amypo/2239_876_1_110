@@ -1,4 +1,10 @@
 package com.example.demo.repository;
 
-public interface ResourceAllocationRepository {
+import com.example.demo.entity.ResourceAllocation;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ResourceAllocationRepository extends JpaRepository<ResourceAllocation, Long> {
+    // No additional methods required; CRUD operations are inherited from JpaRepository
 }

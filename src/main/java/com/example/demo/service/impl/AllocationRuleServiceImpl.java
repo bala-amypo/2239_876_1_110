@@ -21,16 +21,18 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
     @Override
     public AllocationRule createRule(AllocationRule rule) {
 
-        if (allocationRuleRepository.existsByRuleName(rule.getRuleName())) {
+        if (ruleRepository.existsByRuleName(rule.getRuleName())) {
             throw new IllegalArgumentException("Rule already exists");
         }
 
-        if (rule.getPriorityWeight() < 0) {
-            throw new IllegalArgumentException("Invalid priority");
+        // 🔥 REQUIRED DEFAULT
+        if (rule.getPriorityWeight() == null) {
+            rule.setPriorityWeight(0);
         }
 
-        return allocationRuleRepository.save(rule);
+        return ruleRepository.save(rule);
     }
+
 
     @Override
     public AllocationRule getRule(Long id) {

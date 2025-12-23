@@ -40,6 +40,7 @@ public class ResourceAllocation {
         this.allocatedAt = LocalDateTime.now();
     }
 
+
     public Long getId() {
         return id;
     }

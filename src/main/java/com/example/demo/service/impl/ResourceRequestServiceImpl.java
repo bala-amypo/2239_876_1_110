@@ -29,19 +29,25 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (request.getStartTime().isAfter(request.getEndTime())) {
-            throw new IllegalArgumentException("Invalid time range");
-        }
-
-        if (request.getPurpose() == null) {
+        if (request.getPurpose() == null || request.getPurpose().isBlank()) {
             throw new IllegalArgumentException("Purpose required");
         }
 
+        if (request.getStartTime() != null && request.getEndTime() != null
+                && request.getStartTime().isAfter(request.getEndTime())) {
+            throw new IllegalArgumentException("Invalid time range");
+        }
+
         request.setRequestedBy(user);
-        request.setStatus("PENDING");
+
+        // 🔥 REQUIRED DEFAULT
+        if (request.getStatus() == null) {
+            request.setStatus("PENDING");
+        }
 
         return requestRepository.save(request);
     }
+
 
     @Override
     public List<ResourceRequest> getRequestsByUser(Long userId) {

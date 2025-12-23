@@ -2,12 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ResourceAllocation;
 import com.example.demo.service.ResourceAllocationService;
-import com.example.demo.dto.ApiResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -16,32 +12,24 @@ public class ResourceAllocationController {
 
     private final ResourceAllocationService allocationService;
 
-    @Autowired
     public ResourceAllocationController(ResourceAllocationService allocationService) {
         this.allocationService = allocationService;
     }
 
-    // 1. Automatically allocate a resource for a request
     @PostMapping("/auto/{requestId}")
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResourceAllocation> autoAllocate(@PathVariable Long requestId) {
-        ResourceAllocation allocation = allocationService.autoAllocate(requestId);
-        return ResponseEntity.ok(allocation);
-    }
+public ResponseEntity<Long> autoAllocate(@PathVariable Long requestId) {
+    ResourceAllocation allocation = allocationService.autoAllocate(requestId);
+    return ResponseEntity.ok(allocation.getId());
+}
 
-    // 2. Get all allocations
     @GetMapping
-    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ResourceAllocation>> getAllAllocations() {
-        List<ResourceAllocation> allocations = allocationService.getAllAllocations();
-        return ResponseEntity.ok(allocations);
+        return ResponseEntity.ok(allocationService.getAllAllocations());
     }
 
-    // 3. Get allocation by ID
     @GetMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResourceAllocation> getAllocationById(@PathVariable Long id) {
-        ResourceAllocation allocation = allocationService.getAllocation(id);
-        return ResponseEntity.ok(allocation);
+    public ResponseEntity<ResourceAllocation> getAllocation(@PathVariable Long id) {
+        return ResponseEntity.ok(allocationService.getAllocation(id));
     }
 }
+

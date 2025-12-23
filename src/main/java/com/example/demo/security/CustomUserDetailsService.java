@@ -30,3 +30,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
+}

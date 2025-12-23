@@ -12,10 +12,8 @@ import com.example.demo.service.AllocationRuleService;
 @Service
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    // ✅ MUST be named ruleRepository
     private final AllocationRuleRepository ruleRepository;
 
-    // ✅ REQUIRED constructor
     public AllocationRuleServiceImpl(AllocationRuleRepository ruleRepository) {
         this.ruleRepository = ruleRepository;
     }
@@ -27,7 +25,6 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
             throw new IllegalArgumentException("Rule already exists");
         }
 
-        // ✅ default priorityWeight
         if (rule.getPriorityWeight() == null) {
             rule.setPriorityWeight(0);
         }

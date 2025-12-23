@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.AllocationRule;
 import java.util.List;
+import com.example.demo.entity.AllocationRule;
 
 public interface AllocationRuleService {
 

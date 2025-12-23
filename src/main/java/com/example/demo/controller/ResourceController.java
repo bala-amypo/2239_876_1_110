@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Resource;
-import com.example.demo.service.ResourceService;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.example.demo.entity.Resource;
+import com.example.demo.service.ResourceService;
 
 @RestController
 @RequestMapping("/api/resources")

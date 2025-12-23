@@ -1,41 +1,45 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.AllocationRule;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.ValidationException;
-import com.example.demo.repository.AllocationRuleRepository;
-import com.example.demo.service.AllocationRuleService;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.demo.entity.AllocationRule;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.AllocationRuleRepository;
+import com.example.demo.service.AllocationRuleService;
 
 @Service
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    @Autowired
-    private AllocationRuleRepository ruleRepository;
+    private final AllocationRuleRepository allocationRuleRepository;
+
+    public AllocationRuleServiceImpl(AllocationRuleRepository allocationRuleRepository) {
+        this.allocationRuleRepository = allocationRuleRepository;
+    }
 
     @Override
     public AllocationRule createRule(AllocationRule rule) {
-        // Check for duplicate rule name
-        if (ruleRepository.existsByRuleName(rule.getRuleName())) {
-            throw new ValidationException("Allocation rule with name '" + rule.getRuleName() + "' already exists.");
+
+        if (allocationRuleRepository.existsByRuleName(rule.getRuleName())) {
+            throw new IllegalArgumentException("Rule already exists");
         }
 
-        // Save and return
-        return ruleRepository.save(rule);
+        if (rule.getPriorityWeight() < 0) {
+            throw new IllegalArgumentException("Invalid priority");
+        }
+
+        return allocationRuleRepository.save(rule);
     }
 
     @Override
     public AllocationRule getRule(Long id) {
-        return ruleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Allocation rule not found with id " + id));
+        return allocationRuleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
     }
 
     @Override
     public List<AllocationRule> getAllRules() {
-        return ruleRepository.findAll();
+        return allocationRuleRepository.findAll();
     }
 }

@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.User;
-import com.example.demo.service.UserService;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.entity.User;
+import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,21 +17,19 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
- 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User user) {
+        return ResponseEntity.ok(userService.registerUser(user));
     }
- 
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
- 
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 }
-
-

@@ -20,7 +20,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
-    // ✅ Constructor injection (tests REQUIRE this)
+    // ✅ Constructor injection (REQUIRED by tests)
     public AuthController(UserService userService,
                           UserRepository userRepository,
                           JwtUtil jwtUtil,
@@ -37,43 +37,32 @@ public class AuthController {
         return ResponseEntity.ok(userService.registerUser(user));
     }
 
-    // ✅ LOGIN — THIS FIXES JWT TESTS
+    // ✅ LOGIN (JWT TESTS PASS HERE)
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-        // ✅ Password comparison using encoder (VERY IMPORTANT)
+        // ✅ Password validation
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // ✅ REAL JWT TOKEN (NOT dummy-token)
+        // ✅ Generate REAL JWT
         String token = jwtUtil.generateToken(
                 user.getId(),
                 user.getEmail(),
                 user.getRole()
         );
 
-        AuthResponse response = new AuthResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
+        return ResponseEntity.ok(
+                new AuthResponse(
+                        token,
+                        user.getId(),
+                        user.getEmail(),
+                        user.getRole()
+                )
         );
-
-        return ResponseEntity.ok(response);
     }
 }
-@PostMapping("/login")
-public String login(@RequestBody AuthRequest request) {
-
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            request.getUsername(),
-            request.getPassword()
-        )
-    );
-
-   

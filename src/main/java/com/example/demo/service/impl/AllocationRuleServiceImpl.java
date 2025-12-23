@@ -2,8 +2,11 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.AllocationRule;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.ValidationException;
 import com.example.demo.repository.AllocationRuleRepository;
 import com.example.demo.service.AllocationRuleService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,31 +14,24 @@ import java.util.List;
 @Service
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    private final AllocationRuleRepository ruleRepository;
-
-    public AllocationRuleServiceImpl(AllocationRuleRepository ruleRepository) {
-        this.ruleRepository = ruleRepository;
-    }
+    @Autowired
+    private AllocationRuleRepository ruleRepository;
 
     @Override
     public AllocationRule createRule(AllocationRule rule) {
-
+        // Check for duplicate rule name
         if (ruleRepository.existsByRuleName(rule.getRuleName())) {
-            throw new IllegalArgumentException("Rule name already exists");
+            throw new ValidationException("Allocation rule with name '" + rule.getRuleName() + "' already exists.");
         }
 
-        if (rule.getPriorityWeight() == null || rule.getPriorityWeight() < 0) {
-            throw new IllegalArgumentException("Priority weight must be >= 0");
-        }
-
+        // Save and return
         return ruleRepository.save(rule);
     }
 
     @Override
     public AllocationRule getRule(Long id) {
         return ruleRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Rule not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Allocation rule not found with id " + id));
     }
 
     @Override

@@ -6,29 +6,45 @@ import jakarta.persistence.*;
 public class Resource {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private String name;
-    private String type;
+    private String resourceName;
+    private String resourceType;
+    private int capacity;
+
+    public Resource() {
+    }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getResourceName() {
+        return resourceName;
     }
 
-    public String getType() {
-        return type;
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

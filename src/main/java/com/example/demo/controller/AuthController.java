@@ -66,3 +66,18 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 }
+@PostMapping("/login")
+public String login(@RequestBody AuthRequest request) {
+
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            request.getUsername(),
+            request.getPassword()
+        )
+    );
+
+    User user = userRepository.findByUsername(request.getUsername())
+            .orElseThrow();
+
+    return jwtUtil.generateToken(user.getUsername(), user.getRole());
+}

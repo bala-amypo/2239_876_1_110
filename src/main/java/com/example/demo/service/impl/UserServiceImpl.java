@@ -1,9 +1,12 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
@@ -13,7 +16,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // ✅ Constructor injection (VERY IMPORTANT)
+    // ✅ REQUIRED constructor
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -23,9 +26,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(User user) {
 
-        // ✅ HASH the password (this fixes t51_passwordHashing)
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
+        // ✅ default role
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
+
+        // ✅ password hashing (fixes t51)
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    // ✅ THIS WAS MISSING — FIXES COMPILATION
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

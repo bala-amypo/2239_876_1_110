@@ -12,10 +12,12 @@ import com.example.demo.service.AllocationRuleService;
 @Service
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    private final AllocationRuleRepository allocationRuleRepository;
+    // ✅ MUST be named ruleRepository
+    private final AllocationRuleRepository ruleRepository;
 
-    public AllocationRuleServiceImpl(AllocationRuleRepository allocationRuleRepository) {
-        this.allocationRuleRepository = allocationRuleRepository;
+    // ✅ REQUIRED constructor
+    public AllocationRuleServiceImpl(AllocationRuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
     }
 
     @Override
@@ -25,7 +27,7 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
             throw new IllegalArgumentException("Rule already exists");
         }
 
-        // 🔥 REQUIRED DEFAULT
+        // ✅ default priorityWeight
         if (rule.getPriorityWeight() == null) {
             rule.setPriorityWeight(0);
         }
@@ -33,15 +35,14 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
         return ruleRepository.save(rule);
     }
 
-
     @Override
     public AllocationRule getRule(Long id) {
-        return allocationRuleRepository.findById(id)
+        return ruleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
     }
 
     @Override
     public List<AllocationRule> getAllRules() {
-        return allocationRuleRepository.findAll();
+        return ruleRepository.findAll();
     }
 }

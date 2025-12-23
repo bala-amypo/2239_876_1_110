@@ -1,17 +1,15 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.repository.ResourceRequestRepository;
+import com.example.demo.service.ResourceRequestService;
+import org.springframework.stereotype.Service;
+
 @Service
 public class ResourceRequestServiceImpl implements ResourceRequestService {
 
-    private ResourceRequestRepository resourceRequestRepository;
-    private UserRepository userRepository;
+    private final ResourceRequestRepository resourceRequestRepository;
 
-    // REQUIRED by test case
-    public ResourceRequestServiceImpl() {
-    }
-
-    @Autowired
-    public ResourceRequestServiceImpl(ResourceRequestRepository resourceRequestRepository,
-                                      UserRepository userRepository) {
+    public ResourceRequestServiceImpl(ResourceRequestRepository resourceRequestRepository) {
         this.resourceRequestRepository = resourceRequestRepository;
-        this.userRepository = userRepository;
     }
 }

@@ -1,13 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Resource;
-import com.example.demo.dto.ResourceRequestDto;
 import java.util.List;
+import com.example.demo.entity.Resource;
 
 public interface ResourceService {
-
+    Resource createResource(Resource resource);
     List<Resource> getAllResources();
-
-    // 🔥 REQUIRED BY CONTROLLER TEST
-    Resource createResource(ResourceRequestDto dto);
 }

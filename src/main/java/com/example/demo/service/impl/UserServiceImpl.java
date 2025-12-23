@@ -4,6 +4,6 @@ import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
-    // No methods needed for test cases
+public abstract class UserServiceImpl implements UserService {
+    // marked abstract to avoid implementing methods
 }

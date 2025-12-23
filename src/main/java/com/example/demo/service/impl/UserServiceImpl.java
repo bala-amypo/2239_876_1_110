@@ -13,15 +13,19 @@ import com.example.demo.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
-    // ✅ Constructor used by TEST CASES
+    // ✅ REQUIRED by Spring Boot
+    public UserServiceImpl() {
+    }
+
+    // ✅ Used by TEST CASES
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // ✅ Constructor used by SPRING BOOT
+    // ✅ Used by SPRING BOOT (dependency injection)
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -31,12 +35,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(User user) {
 
-        // default role
         if (user.getRole() == null) {
             user.setRole("USER");
         }
 
-        // hash password ONLY if encoder is available
         if (passwordEncoder != null && user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }

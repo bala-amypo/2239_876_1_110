@@ -9,55 +9,51 @@ import com.example.demo.repository.ResourceAllocationRepository;
 import com.example.demo.repository.ResourceRepository;
 import com.example.demo.repository.ResourceRequestRepository;
 import com.example.demo.service.ResourceAllocationService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
-    @Autowired
-    private ResourceAllocationRepository allocationRepository;
+    private final ResourceAllocationRepository allocationRepository;
+    private final ResourceRequestRepository requestRepository;
+    private final ResourceRepository resourceRepository;
 
     @Autowired
-    private ResourceRequestRepository requestRepository;
-
-    @Autowired
-    private ResourceRepository resourceRepository;
+    public ResourceAllocationServiceImpl(ResourceAllocationRepository allocationRepository,
+                                         ResourceRequestRepository requestRepository,
+                                         ResourceRepository resourceRepository) {
+        this.allocationRepository = allocationRepository;
+        this.requestRepository = requestRepository;
+        this.resourceRepository = resourceRepository;
+    }
 
     @Override
     public ResourceAllocation autoAllocate(Long requestId) {
-        // Load the ResourceRequest
         ResourceRequest request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Resource request not found with id " + requestId));
+                .orElseThrow(() -> new ResourceNotFoundException("Request not found with id: " + requestId));
 
-        // Find candidate resources by type
         List<Resource> candidates = resourceRepository.findByResourceType(request.getResourceType());
         if (candidates.isEmpty()) {
-            throw new AllocationException("No available resources of type '" + request.getResourceType() + "' for allocation.");
+            throw new AllocationException("No resources available for type: " + request.getResourceType());
         }
 
-        // For simplicity, pick the first available resource
-        Resource allocatedResource = candidates.get(0);
-
-        // Create allocation
+        Resource resource = candidates.get(0); // simple allocation logic
         ResourceAllocation allocation = new ResourceAllocation();
-        allocation.setResource(allocatedResource);
-        allocation.setRequest(request);
-        allocation.setConflict(false); // Assuming no conflict logic implemented yet
+        allocation.setResource(resource);
+        allocation.setResourceRequest(request);
+        allocation.setConflictFlag(false);
         allocation.setAllocatedAt(LocalDateTime.now());
 
-        // Save and return
         return allocationRepository.save(allocation);
     }
 
     @Override
     public ResourceAllocation getAllocation(Long id) {
         return allocationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Resource allocation not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Allocation not found with id: " + id));
     }
 
     @Override

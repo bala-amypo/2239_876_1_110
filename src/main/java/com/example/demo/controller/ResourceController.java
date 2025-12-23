@@ -1,28 +1,24 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Resource;
 import com.example.demo.dto.ResourceRequestDto;
-import com.example.demo.dto.ResourceResponseDto;
 import com.example.demo.service.ResourceService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/api/resources")
+@RequestMapping("/resources")
 public class ResourceController {
 
-    private final ResourceService resourceService;
-
-    public ResourceController(ResourceService resourceService) {
-        this.resourceService = resourceService;
-    }
+    @Autowired
+    private ResourceService resourceService;
 
     @PostMapping
-    public ResponseEntity<ResourceResponseDto> createResource(
-            @RequestBody ResourceRequestDto requestDto) {
+    public ResponseEntity<Resource> createResource(
+            @RequestBody ResourceRequestDto dto) {
 
-        ResourceResponseDto response =
-                resourceService.createResource(requestDto);
-
-        return ResponseEntity.ok(response);
+        Resource resource = resourceService.createResource(dto);
+        return ResponseEntity.ok(resource);
     }
 }

@@ -4,69 +4,90 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "resource_allocations",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "request_id")
-    }
-)
-public class ResourceAllocation {
+@Table(name = "resource_allocations")
+public class ResourceAllocation  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many allocations can use the same resource
     @ManyToOne
-    @JoinColumn(name = "resource_id", nullable = false)
+    @JoinColumn(name = "resource_id")
     private Resource resource;
 
-    // One allocation per request (unique)
     @OneToOne
-    @JoinColumn(name = "request_id", nullable = false, unique = true)
+    @JoinColumn(name = "request_id", unique = true)
     private ResourceRequest request;
 
     private LocalDateTime allocatedAt;
 
-    private Boolean conflict;
+    private Boolean conflictFlag;
 
     private String notes;
 
-    // No-arg constructor
     public ResourceAllocation() {
     }
 
-    // Parameterized constructor
-    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflict, String notes) {
+    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
         this.resource = resource;
         this.request = request;
-        this.conflict = conflict;
+        this.conflictFlag = conflictFlag;
         this.notes = notes;
     }
 
-    // Automatically set allocation time on persist
     @PrePersist
-    public void onAllocate() {
+    protected void onCreate() {
         if (this.allocatedAt == null) {
             this.allocatedAt = LocalDateTime.now();
         }
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Resource getResource() { return resource; }
-    public void setResource(Resource resource) { this.resource = resource; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public ResourceRequest getRequest() { return request; }
-    public void setRequest(ResourceRequest request) { this.request = request; }
+    public Resource getResource() {
+        return resource;
+    }
 
-    public LocalDateTime getAllocatedAt() { return allocatedAt; }
-    public void setAllocatedAt(LocalDateTime allocatedAt) { this.allocatedAt = allocatedAt; }
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-    public Boolean getConflict() { return conflict; }
-    public void setConflict(Boolean conflict) { this.conflict = conflict; }
+    public ResourceRequest getRequest() {
+        return request;
+    }
 
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+    public void setRequest(ResourceRequest request) {
+        this.request = request;
+    }
+
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
+
+    public void setAllocatedAt(LocalDateTime allocatedAt) {
+        this.allocatedAt = allocatedAt;
+    }
+
+    public Boolean getConflictFlag() {
+        return conflictFlag;
+    }
+
+    public void setConflictFlag(Boolean conflictFlag) {
+        this.conflictFlag = conflictFlag;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
+

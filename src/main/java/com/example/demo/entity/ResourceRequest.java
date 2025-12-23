@@ -1,9 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.AssertTrue;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,58 +13,46 @@ public class ResourceRequest {
 
     private String resourceType;
 
-    // Many requests belong to one user
     @ManyToOne
-    @JoinColumn(name = "requested_by", nullable = false)
+    @JoinColumn(name = "user_id")
     private User requestedBy;
 
     private LocalDateTime startTime;
-
     private LocalDateTime endTime;
 
-    @NotBlank(message = "Purpose is required")
     private String purpose;
 
     private String status;
 
-    // One request can have one allocation
-    @OneToOne(mappedBy = "resourceRequest", cascade = CascadeType.ALL)
-    private ResourceAllocation resourceAllocation;
+    @OneToOne(mappedBy = "request")
+    private ResourceAllocation allocation;
 
-    // No-arg constructor
     public ResourceRequest() {
-        this.status = "PENDING"; // default status
     }
 
-    // Parameterized constructor
-    public ResourceRequest(
-            String resourceType,
-            User requestedBy,
-            LocalDateTime startTime,
-            LocalDateTime endTime,
-            String purpose,
-            String status) {
-
+    public ResourceRequest(String resourceType, User requestedBy, LocalDateTime startTime, LocalDateTime endTime,
+            String purpose, String status) {
         this.resourceType = resourceType;
         this.requestedBy = requestedBy;
         this.startTime = startTime;
         this.endTime = endTime;
         this.purpose = purpose;
-        this.status = (status == null || status.isEmpty()) ? "PENDING" : status;
+        this.status = status;
     }
 
-    // Validation: startTime must be before endTime
-    @AssertTrue(message = "Start time must be before end time")
-    public boolean isValidTimeRange() {
-        if (startTime == null || endTime == null) {
-            return true;
+    @PrePersist
+    protected void onCreate() {
+        if (this.status == null) {
+            this.status = "PENDING";
         }
-        return startTime.isBefore(endTime);
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getResourceType() {
@@ -118,11 +103,12 @@ public class ResourceRequest {
         this.status = status;
     }
 
-    public ResourceAllocation getResourceAllocation() {
-        return resourceAllocation;
+    public ResourceAllocation getAllocation() {
+        return allocation;
     }
 
-    public void setResourceAllocation(ResourceAllocation resourceAllocation) {
-        this.resourceAllocation = resourceAllocation;
+    public void setAllocation(ResourceAllocation allocation) {
+        this.allocation = allocation;
     }
 }
+

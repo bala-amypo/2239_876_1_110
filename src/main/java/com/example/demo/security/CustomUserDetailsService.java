@@ -30,4 +30,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
+
+        User user = optionalUser.get();
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                Collections.singletonList(
+                        new SimpleGrantedAuthority("ROLE_" + user.getRole())
+                )
+        );
+    }
 }

@@ -9,6 +9,11 @@ public class ResourceRequest {
     @GeneratedValue
     private Long id;
 
+    private String resourceType;
+    private String status;
+    private String startTime;
+    private String endTime;
+
     @ManyToOne
     private User requestedBy;
 
@@ -21,6 +26,39 @@ public class ResourceRequest {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    // 🔥 REQUIRED BY TESTS
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public User getRequestedBy() {

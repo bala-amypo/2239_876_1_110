@@ -15,8 +15,9 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    // 🔧 FIXED
     @Override
-    public User registerUser(User user) {
+    public User createUser(User user) {
         return user;
     }
 

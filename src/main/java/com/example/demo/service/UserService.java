@@ -5,8 +5,9 @@ import java.util.List;
 
 public interface UserService {
 
-    // 🔧 FIXED
-    User createUser(User user);
+    User registerUser(User user);
+
+    User getUser(Long id);
 
     List<User> getAllUsers();
 }

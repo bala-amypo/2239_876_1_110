@@ -50,4 +50,13 @@ public class AuthController {
                 user.getRole()
         );
 
-        AuthResponse response = new Au
+        AuthResponse response = new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+}

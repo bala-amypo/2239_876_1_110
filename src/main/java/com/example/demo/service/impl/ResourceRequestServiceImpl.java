@@ -45,8 +45,9 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
 
     @Override
     public List<ResourceRequest> getRequestsByUser(Long userId) {
-        return requestRepository.findByRequestedById(userId);
+        return requestRepository.findByRequestedBy_Id(userId);
     }
+
 
     @Override
     public ResourceRequest getRequest(Long id) {

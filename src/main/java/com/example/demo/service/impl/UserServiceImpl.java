@@ -1,8 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.UserAlreadyExistsException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
@@ -15,35 +15,37 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public User registerUser(User user) {
-        // Check if user with email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists.");
+            throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists");
         }
 
         // Set default role if null
-        if (user.getRole() == null) {
+        if (user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("USER");
         }
 
-        // Hash the raw password
+        // Hash password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Save the user
         return userRepository.save(user);
     }
 
     @Override
     public User getUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
     @Override

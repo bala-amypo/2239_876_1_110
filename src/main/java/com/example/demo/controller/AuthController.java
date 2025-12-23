@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
-import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import com.example.demo.util.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,36 +19,34 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+    public AuthController(UserService userService,
+                          JwtUtil jwtUtil,
+                          PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // 1. User Registration
     @PostMapping("/register")
-    public ApiResponse registerUser(@RequestBody User user) {
+    public ApiResponse<User> register(@RequestBody User user) {
         User createdUser = userService.registerUser(user);
-        return new ApiResponse("User registered successfully with id: " + createdUser.getId());
+        return ApiResponse.success("User registered successfully", createdUser);
     }
 
-    // 2. User Login
     @PostMapping("/login")
-    public AuthResponse loginUser(@RequestBody AuthRequest authRequest) {
-        // Find user by email
+    public ApiResponse<AuthResponse> login(@RequestBody User loginRequest) {
         User user = userService.getAllUsers().stream()
-                .filter(u -> u.getEmail().equals(authRequest.getEmail()))
+                .filter(u -> u.getEmail().equals(loginRequest.getEmail()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + loginRequest.getEmail()));
 
-        // Verify password
-        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return ApiResponse.error("Invalid password");
         }
 
-        // Generate JWT token
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
+        AuthResponse authResponse = new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
 
-        return new AuthResponse(token);
+        return ApiResponse.success("Login successful", authResponse);
     }
 }

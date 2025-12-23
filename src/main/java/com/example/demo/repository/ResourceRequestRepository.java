@@ -1,12 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.ResourceRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import com.example.demo.entity.ResourceRequest;
 import java.util.List;
 
-public interface ResourceRequestRepository extends JpaRepository<ResourceRequest, Long> {
+public interface ResourceRequestRepository
+        extends JpaRepository<ResourceRequest, Long> {
 
-    // ✅ FIXED method name
-    List<ResourceRequest> findByRequestedById(Long userId);
+    List<ResourceRequest> findByRequestedBy_Id(long id);
 }

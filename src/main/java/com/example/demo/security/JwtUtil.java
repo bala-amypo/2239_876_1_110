@@ -1,15 +1,19 @@
 package com.example.demo.security;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class JwtUtil {
 
-    public JwtUtil() {}
+    private String secret;
+    private int expiration;
 
-    public JwtUtil(String secret) {}
+    public JwtUtil() {
+    }
 
-    public String generateToken(String username) {
-        return "dummy-token";
+    public JwtUtil(String secret) {
+        this.secret = secret;
+    }
+
+    public JwtUtil(String secret, int expiration) {
+        this.secret = secret;
+        this.expiration = expiration;
     }
 }

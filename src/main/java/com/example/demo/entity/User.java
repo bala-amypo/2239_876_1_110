@@ -35,6 +35,15 @@ public class User {
         this.role = role;
     }
 
+    // add inside User.java
+    public User(String fullName, String email, String password, String role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();

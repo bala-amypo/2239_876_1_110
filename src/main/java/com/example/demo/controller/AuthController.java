@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,20 +32,22 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail());
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
 
-        if (user == null || !user.getPassword().equals(request.getPassword())) {
+        if (optionalUser.isEmpty()
+                || !optionalUser.get().getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // No JWT, simple response
-        AuthResponse response = new AuthResponse(
-                "dummy-token",
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
+        User user = optionalUser.get();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                new AuthResponse(
+                        "dummy-token",
+                        user.getId(),
+                        user.getEmail(),
+                        user.getRole()
+                )
+        );
     }
 }

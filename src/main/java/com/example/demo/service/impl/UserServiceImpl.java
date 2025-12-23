@@ -1,22 +1,15 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // REQUIRED by test case
     public UserServiceImpl() {
     }
 
+    // REQUIRED for Spring
+    @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;

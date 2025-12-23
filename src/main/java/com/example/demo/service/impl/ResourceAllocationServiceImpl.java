@@ -1,27 +1,20 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.Resource;
-import com.example.demo.repository.ResourceRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Service
-public class ResourceAllocationServiceImpl {
+public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
-    @Autowired
+    private ResourceRequestRepository resourceRequestRepository;
     private ResourceRepository resourceRepository;
+    private ResourceAllocationRepository resourceAllocationRepository;
 
+    // REQUIRED by test case
     public ResourceAllocationServiceImpl() {
     }
 
-    public Resource allocateResource(String type) {
-
-        Resource resource = resourceRepository.findFirstByType(type);
-
-        if (resource == null) {
-            throw new IllegalArgumentException("Resource not found");
-        }
-
-        return resource;
+    @Autowired
+    public ResourceAllocationServiceImpl(ResourceRequestRepository resourceRequestRepository,
+                                         ResourceRepository resourceRepository,
+                                         ResourceAllocationRepository resourceAllocationRepository) {
+        this.resourceRequestRepository = resourceRequestRepository;
+        this.resourceRepository = resourceRepository;
+        this.resourceAllocationRepository = resourceAllocationRepository;
     }
 }

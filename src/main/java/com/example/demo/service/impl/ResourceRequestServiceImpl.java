@@ -1,15 +1,17 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.ResourceRequest;
-import org.springframework.stereotype.Service;
-
 @Service
-public class ResourceRequestServiceImpl {
+public class ResourceRequestServiceImpl implements ResourceRequestService {
 
+    private ResourceRequestRepository resourceRequestRepository;
+    private UserRepository userRepository;
+
+    // REQUIRED by test case
     public ResourceRequestServiceImpl() {
     }
 
-    public void updateStatus(ResourceRequest request, String status) {
-        request.setStatus(status);
+    @Autowired
+    public ResourceRequestServiceImpl(ResourceRequestRepository resourceRequestRepository,
+                                      UserRepository userRepository) {
+        this.resourceRequestRepository = resourceRequestRepository;
+        this.userRepository = userRepository;
     }
 }

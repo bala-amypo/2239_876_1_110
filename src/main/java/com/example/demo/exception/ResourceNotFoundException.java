@@ -1,8 +1,8 @@
 package com.example.demo.exception;
 
-public class BadRequestException extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
-    public BadRequestException(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 }

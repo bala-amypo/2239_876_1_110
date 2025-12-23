@@ -7,7 +7,7 @@ import com.example.demo.entity.ResourceRequest;
 
 public interface ResourceRequestRepository extends JpaRepository<ResourceRequest, Long> {
 
-    List<ResourceRequest> findByRequestedById(Long userId);
+   List<ResourceRequest> findByRequestedById(Long userId);
 
     List<ResourceRequest> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 }

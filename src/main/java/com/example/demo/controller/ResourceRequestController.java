@@ -1,43 +1,35 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.ResourceRequest;
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.service.ResourceRequestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/requests")
+@RequestMapping("/requests")
 public class ResourceRequestController {
 
-    private final ResourceRequestService service;
+    @Autowired
+    private ResourceRequestService service;
 
-    public ResourceRequestController(ResourceRequestService service) {
-        this.service = service;
-    }
-
-   
     @PostMapping("/{userId}")
-    public ApiResponse createRequest(@PathVariable Long userId, @RequestBody ResourceRequest request) {
-        ResourceRequest created = service.createRequest(userId, request);
-        return new ApiResponse(true, "Request created successfully", created);
+    public ResourceRequest createRequest(
+            @PathVariable Long userId,
+            @RequestBody ResourceRequest request) {
+        return service.createRequest(userId, request);
     }
 
-   
-    @GetMapping("/{id}")
-    public ResourceRequest getRequest(@PathVariable Long id) {
-        return service.getRequest(id);
+    @GetMapping("/{userId}")
+    public List<ResourceRequest> getRequests(@PathVariable Long userId) {
+        return service.getRequests(userId);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ResourceRequest> getRequestsByUser(@PathVariable Long userId) {
-        return service.getRequestsByUser(userId);
-    }
-
-    @PutMapping("/status/{requestId}")
-    public ApiResponse updateRequestStatus(@PathVariable Long requestId, @RequestParam String status) {
-        ResourceRequest updated = service.updateRequestStatus(requestId, status);
-        return new ApiResponse(true, "Request status updated", updated);
+    @PutMapping("/{id}/status")
+    public ResourceRequest updateRequestStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        return service.updateRequestStatus(id, status);
     }
 }

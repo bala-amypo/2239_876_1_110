@@ -76,8 +76,4 @@ public String login(@RequestBody AuthRequest request) {
         )
     );
 
-    User user = userRepository.findByUsername(request.getUsername())
-            .orElseThrow();
-
-    return jwtUtil.generateToken(user.getUsername(), user.getRole());
-}
+   

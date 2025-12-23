@@ -4,6 +4,9 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
+import java.util.Collections;
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -14,6 +17,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(User user) {
-        return userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return Collections.emptyList();
     }
 }

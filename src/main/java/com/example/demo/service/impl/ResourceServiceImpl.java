@@ -1,36 +1,27 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ResourceRequest;
-import com.example.demo.repository.ResourceRequestRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.ResourceRequestService;
+import com.example.demo.entity.Resource;
+import com.example.demo.repository.ResourceRepository;
+import com.example.demo.service.ResourceService;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ResourceRequestServiceImpl implements ResourceRequestService {
+public class ResourceServiceImpl implements ResourceService {
 
-    private final ResourceRequestRepository requestRepository;
-    private final UserRepository userRepository;
+    private final ResourceRepository resourceRepository;
 
-    public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository,
-                                      UserRepository userRepository) {
-        this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
+    public ResourceServiceImpl(ResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
     }
 
     @Override
-    public ResourceRequest createRequest(Long userId, ResourceRequest request) {
-        return request;
+    public Resource createResource(Resource resource) {
+        return resource;
     }
 
     @Override
-    public List<ResourceRequest> getRequests(Long userId) {
+    public List<Resource> getAllResources() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public void updateRequestStatus(Long requestId, String status) {
-        // stub
     }
 }

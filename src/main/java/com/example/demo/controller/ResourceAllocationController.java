@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ResourceAllocation;
-import com.example.demo.service.ResourceAllocationService;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.example.demo.entity.ResourceAllocation;
+import com.example.demo.service.ResourceAllocationService;
 
 @RestController
 @RequestMapping("/api/allocations")
@@ -17,10 +19,9 @@ public class ResourceAllocationController {
     }
 
     @PostMapping("/auto/{requestId}")
-public ResponseEntity<Long> autoAllocate(@PathVariable Long requestId) {
-    ResourceAllocation allocation = allocationService.autoAllocate(requestId);
-    return ResponseEntity.ok(allocation.getId());
-}
+    public ResponseEntity<ResourceAllocation> autoAllocate(@PathVariable Long requestId) {
+        return ResponseEntity.ok(allocationService.autoAllocate(requestId));
+    }
 
     @GetMapping
     public ResponseEntity<List<ResourceAllocation>> getAllAllocations() {
@@ -32,4 +33,3 @@ public ResponseEntity<Long> autoAllocate(@PathVariable Long requestId) {
         return ResponseEntity.ok(allocationService.getAllocation(id));
     }
 }
-

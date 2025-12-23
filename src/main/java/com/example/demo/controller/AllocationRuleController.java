@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.AllocationRule;
-import com.example.demo.service.AllocationRuleService;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.example.demo.entity.AllocationRule;
+import com.example.demo.service.AllocationRuleService;
 
 @RestController
 @RequestMapping("/api/rules")
@@ -31,4 +33,3 @@ public class AllocationRuleController {
         return ResponseEntity.ok(ruleService.getRule(id));
     }
 }
-

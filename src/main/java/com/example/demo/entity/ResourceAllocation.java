@@ -24,11 +24,11 @@ public class ResourceAllocation {
     // One allocation per request (unique)
     @OneToOne
     @JoinColumn(name = "request_id", nullable = false, unique = true)
-    private ResourceRequest resourceRequest;
+    private ResourceRequest request;
 
     private LocalDateTime allocatedAt;
 
-    private Boolean conflictFlag;
+    private Boolean conflict;
 
     private String notes;
 
@@ -37,62 +37,36 @@ public class ResourceAllocation {
     }
 
     // Parameterized constructor
-    public ResourceAllocation(
-            Resource resource,
-            ResourceRequest resourceRequest,
-            Boolean conflictFlag,
-            String notes) {
-
+    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflict, String notes) {
         this.resource = resource;
-        this.resourceRequest = resourceRequest;
-        this.conflictFlag = conflictFlag;
+        this.request = request;
+        this.conflict = conflict;
         this.notes = notes;
     }
 
-    // Automatically set allocation time
+    // Automatically set allocation time on persist
     @PrePersist
     public void onAllocate() {
-        this.allocatedAt = LocalDateTime.now();
+        if (this.allocatedAt == null) {
+            this.allocatedAt = LocalDateTime.now();
+        }
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public Resource getResource() {
-        return resource;
-    }
+    public Resource getResource() { return resource; }
+    public void setResource(Resource resource) { this.resource = resource; }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
+    public ResourceRequest getRequest() { return request; }
+    public void setRequest(ResourceRequest request) { this.request = request; }
 
-    public ResourceRequest getResourceRequest() {
-        return resourceRequest;
-    }
+    public LocalDateTime getAllocatedAt() { return allocatedAt; }
+    public void setAllocatedAt(LocalDateTime allocatedAt) { this.allocatedAt = allocatedAt; }
 
-    public void setResourceRequest(ResourceRequest resourceRequest) {
-        this.resourceRequest = resourceRequest;
-    }
+    public Boolean getConflict() { return conflict; }
+    public void setConflict(Boolean conflict) { this.conflict = conflict; }
 
-    public LocalDateTime getAllocatedAt() {
-        return allocatedAt;
-    }
-
-    public Boolean getConflictFlag() {
-        return conflictFlag;
-    }
-
-    public void setConflictFlag(Boolean conflictFlag) {
-        this.conflictFlag = conflictFlag;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }

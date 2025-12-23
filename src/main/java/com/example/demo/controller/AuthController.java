@@ -1,14 +1,12 @@
 package com.example.demo.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
 
 @RestController
@@ -17,17 +15,11 @@ public class AuthController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
 
     public AuthController(UserService userService,
-                          UserRepository userRepository,
-                          JwtUtil jwtUtil,
-                          PasswordEncoder passwordEncoder) {
+                          UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -40,18 +32,13 @@ public class AuthController {
 
         User user = userRepository.findByEmail(request.getEmail());
 
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (user == null || !user.getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        String token = jwtUtil.generateToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-
+        // No JWT, simple response
         AuthResponse response = new AuthResponse(
-                token,
+                "dummy-token",
                 user.getId(),
                 user.getEmail(),
                 user.getRole()

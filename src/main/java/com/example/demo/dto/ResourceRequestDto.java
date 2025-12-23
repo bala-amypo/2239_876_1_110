@@ -2,22 +2,34 @@ package com.example.demo.dto;
 
 public class ResourceRequestDto {
 
-    private String name;
-    private String type;
+    private String resourceName;
+    private String resourceType;
+    private int capacity;
 
-    public String getName() {
-        return name;
+    public ResourceRequestDto() {
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getResourceName() {
+        return resourceName;
     }
 
-    public String getType() {
-        return type;
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

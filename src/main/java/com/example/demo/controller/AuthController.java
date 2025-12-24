@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.security.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "JWT authentication endpoints")
 public class AuthController {
     private final JwtUtil jwtUtil;
 
@@ -14,6 +17,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "User login", description = "Generate JWT token for user authentication")
     public Map<String, String> login(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
         String role = credentials.getOrDefault("role", "USER");
@@ -24,6 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/validate")
+    @Operation(summary = "Validate token", description = "Validate JWT token and return user information")
     public Map<String, Object> validate(@RequestBody Map<String, String> request) {
         String token = request.get("token");
         var claims = jwtUtil.parseClaims(token);

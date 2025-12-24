@@ -1,8 +1,17 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "allocation_rules")
 public class AllocationRule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(unique = true)
     private String ruleName;
+    
     private String ruleType;
     private Integer priorityWeight;
 

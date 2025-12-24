@@ -5,12 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AllocationRuleRepository {
-
     boolean existsByRuleName(String ruleName);
-
-    Optional<AllocationRule> findById(Long id);
-
-    List<AllocationRule> findAll();
-
     AllocationRule save(AllocationRule rule);
+    Optional<AllocationRule> findById(Long id);
+    List<AllocationRule> findAll();
 }

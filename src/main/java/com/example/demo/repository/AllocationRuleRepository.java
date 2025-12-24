@@ -1,12 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.AllocationRule;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AllocationRuleRepository {
+@Repository
+public interface AllocationRuleRepository extends JpaRepository<AllocationRule, Long> {
     boolean existsByRuleName(String ruleName);
-    AllocationRule save(AllocationRule rule);
-    Optional<AllocationRule> findById(Long id);
-    List<AllocationRule> findAll();
 }

@@ -30,7 +30,6 @@ public class AllocationRuleController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all rules", description = "Retrieve all allocation rules")
     public List<AllocationRule> getAll() {
         return ruleService.getAllRules();
     }

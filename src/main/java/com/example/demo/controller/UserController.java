@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-@Tag(name = "User Management", description = "APIs for user registration and management")
 public class UserController {
     private final UserService userService;
 
@@ -17,7 +16,6 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Register new user", description = "Register a new user in the system")
     public User register(@RequestBody User user) {
         return userService.registerUser(user);
     }

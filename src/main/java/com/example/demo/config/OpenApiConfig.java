@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class OpenApirConfig {
+public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -22,7 +22,7 @@ public class OpenApirConfig {
                 .bearerFormat("JWT");
 
         Server server = new Server()
-                .url("https://9127.32procr.amypo.ai/")
+                .url("https://9129.32procr.amypo.ai")
                 .description("Production Server");
 
         return new OpenAPI()

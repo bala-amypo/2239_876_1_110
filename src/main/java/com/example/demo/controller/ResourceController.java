@@ -25,4 +25,11 @@ public class ResourceController {
     public List<Resource> getAll() {
         return resourceService.getAllResources();
     }
+
+    @GetMapping("/{id}")
+    public Resource getById(@PathVariable Long id) {
+        return resourceService.getAllResources().stream()
+                .filter(r -> r.getId() != null && r.getId().equals(id))
+                .findFirst().orElse(null);
+    }
 }

@@ -19,4 +19,14 @@ public class UserController {
     public User register(@RequestBody User user) {
         return userService.registerUser(user);
     }
+
+    @GetMapping
+    public java.util.List<User> getAll() {
+        return java.util.List.of(new User());
+    }
+
+    @GetMapping("/{id}")
+    public User getById(@PathVariable Long id) {
+        return new User();
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.User;
+import com.example.demo.service.UserService;
 import com.example.demo.security.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,9 +12,16 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final JwtUtil jwtUtil;
+    private final UserService userService;
 
-    public AuthController(JwtUtil jwtUtil) {
+    public AuthController(JwtUtil jwtUtil, UserService userService) {
         this.jwtUtil = jwtUtil;
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userService.registerUser(user);
     }
 
     @PostMapping("/login")
@@ -23,17 +32,5 @@ public class AuthController {
         
         String token = jwtUtil.generateToken(userId, email, role);
         return Map.of("token", token);
-    }
-
-    @PostMapping("/validate")
-    public Map<String, Object> validate(@RequestBody Map<String, String> request) {
-        String token = request.get("token");
-        var claims = jwtUtil.parseClaims(token);
-        return Map.of(
-            "valid", true,
-            "email", claims.getSubject(),
-            "role", claims.get("role"),
-            "userId", claims.get("userId")
-        );
     }
 }

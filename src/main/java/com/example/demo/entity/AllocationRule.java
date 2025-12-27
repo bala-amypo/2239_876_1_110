@@ -1,33 +1,49 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "allocation_rules")
 public class AllocationRule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(unique = true)
+    private String ruleName;
+    
+    private String ruleType;
+    
+    private Integer priorityWeight;
+    
+    private LocalDateTime createdAt;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public AllocationRule() {
+        this.createdAt = LocalDateTime.now();
+        this.priorityWeight = 0;
+    }
 
-    @Column(unique = true)
-    private String ruleName;
+    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
+        this();
+        this.ruleName = ruleName;
+        this.ruleType = ruleType;
+        this.priorityWeight = priorityWeight != null ? priorityWeight : 0;
+    }
 
-    private String ruleType;
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    private Integer priorityWeight;
+    public String getRuleName() { return ruleName; }
+    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
 
-    public AllocationRule() {}
+    public String getRuleType() { return ruleType; }
+    public void setRuleType(String ruleType) { this.ruleType = ruleType; }
 
-    // getters & setters
-    public Long getId() { return id; }
+    public Integer getPriorityWeight() { return priorityWeight; }
+    public void setPriorityWeight(Integer priorityWeight) { this.priorityWeight = priorityWeight; }
 
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
-
-    public String getRuleType() { return ruleType; }
-    public void setRuleType(String ruleType) { this.ruleType = ruleType; }
-
-    public Integer getPriorityWeight() { return priorityWeight; }
-    public void setPriorityWeight(Integer priorityWeight) { this.priorityWeight = priorityWeight; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

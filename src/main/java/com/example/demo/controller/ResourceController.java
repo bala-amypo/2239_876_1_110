@@ -2,14 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Resource;
 import com.example.demo.service.ResourceService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
 public class ResourceController {
+
     private final ResourceService resourceService;
 
     public ResourceController(ResourceService resourceService) {
@@ -17,19 +18,12 @@ public class ResourceController {
     }
 
     @PostMapping
-    public Resource create(@RequestBody Resource resource) {
-        return resourceService.createResource(resource);
+    public ResponseEntity<Resource> create(@RequestBody Resource resource) {
+        return ResponseEntity.ok(resourceService.createResource(resource));
     }
 
     @GetMapping
-    public List<Resource> getAll() {
-        return resourceService.getAllResources();
-    }
-
-    @GetMapping("/{id}")
-    public Resource getById(@PathVariable Long id) {
-        return resourceService.getAllResources().stream()
-                .filter(r -> r.getId() != null && r.getId().equals(id))
-                .findFirst().orElse(null);
+    public ResponseEntity<List<Resource>> getAll() {
+        return ResponseEntity.ok(resourceService.getAllResources());
     }
 }

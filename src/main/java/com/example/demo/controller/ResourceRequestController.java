@@ -2,37 +2,37 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ResourceRequest;
 import com.example.demo.service.ResourceRequestService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/requests")
 public class ResourceRequestController {
+
     private final ResourceRequestService requestService;
 
     public ResourceRequestController(ResourceRequestService requestService) {
         this.requestService = requestService;
     }
 
-    @PostMapping("/user/{userId}")
-    public ResourceRequest create(@PathVariable Long userId, @RequestBody ResourceRequest request) {
-        return requestService.createRequest(userId, request);
+    @PostMapping("/{userId}")
+    public ResponseEntity<ResourceRequest> createRequest(
+            @PathVariable Long userId,
+            @RequestBody ResourceRequest request) {
+        return ResponseEntity.ok(requestService.createRequest(userId, request));
     }
 
     @GetMapping("/user/{userId}")
-    public List<ResourceRequest> getByUser(@PathVariable Long userId) {
-        return requestService.getRequestsByUser(userId);
+    public ResponseEntity<List<ResourceRequest>> getRequestsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(requestService.getRequestsByUser(userId));
     }
 
-    @PutMapping("/status/{requestId}")
-    public ResourceRequest updateStatus(@PathVariable Long requestId, @RequestParam String status) {
-        return requestService.updateRequestStatus(requestId, status);
-    }
-
-    @GetMapping("/{id}")
-    public ResourceRequest getById(@PathVariable Long id) {
-        return new ResourceRequest();
+    @PutMapping("/{requestId}/status")
+    public ResponseEntity<ResourceRequest> updateStatus(
+            @PathVariable Long requestId,
+            @RequestParam String status) {
+        return ResponseEntity.ok(requestService.updateRequestStatus(requestId, status));
     }
 }

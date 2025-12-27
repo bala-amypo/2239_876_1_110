@@ -14,11 +14,15 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFound(
+    public ResponseEntity<Map<String, Object>> handleResourceNotFound(
             ResourceNotFoundException ex,
             HttpServletRequest request) {
 
-        return build(ex.getMessage(), HttpStatus.NOT_FOUND, request);
+        return buildResponse(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND,
+                request
+        );
     }
 
     @ExceptionHandler(ValidationException.class)
@@ -26,20 +30,26 @@ public class GlobalExceptionHandler {
             ValidationException ex,
             HttpServletRequest request) {
 
-        return build(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
+        return buildResponse(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                request
+        );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGeneric(
+    public ResponseEntity<Map<String, Object>> handleAll(
             Exception ex,
             HttpServletRequest request) {
 
-        return build("Internal server error",
+        return buildResponse(
+                "Internal server error",
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                request);
+                request
+        );
     }
 
-    private ResponseEntity<Map<String, Object>> build(
+    private ResponseEntity<Map<String, Object>> buildResponse(
             String message,
             HttpStatus status,
             HttpServletRequest request) {

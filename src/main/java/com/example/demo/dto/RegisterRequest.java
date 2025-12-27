@@ -1,28 +1,21 @@
 package com.example.demo.dto;
 
-public class RegisterRequestDTO {
+public class RegisterRequest {
 
-    private String name;
+    private String fullName;
     private String email;
     private String password;
     private String role;
 
-    public RegisterRequestDTO() {
+    public RegisterRequest() {
     }
 
-    public RegisterRequestDTO(String name, String email, String password, String role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {

@@ -1,16 +1,11 @@
 package com.example.demo.dto;
 
-public class LoginRequestDTO {
+public class LoginRequest {
 
     private String email;
     private String password;
 
-    public LoginRequestDTO() {
-    }
-
-    public LoginRequestDTO(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public LoginRequest() {
     }
 
     public String getEmail() {

@@ -31,32 +31,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
-        if (header == null || !header.startsWith("Bearer ")) {
+        // Swagger & tests ke liye VERY IMPORTANT
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            String token = header.substring(7);
+            String token = authHeader.substring(7);
             Claims claims = jwtUtil.parseClaims(token);
 
-            UsernamePasswordAuthenticationToken auth =
+            UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             claims.getSubject(),
                             null,
                             Collections.emptyList()
                     );
 
-            auth.setDetails(
+            authentication.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request)
             );
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
 
-        } catch (Exception ignored) {
-            // MUST ignore to allow Swagger & tests
+        } catch (Exception e) {
+            // Invalid / expired token → ignore
+            // Swagger & test cases MUST NOT break
         }
 
         filterChain.doFilter(request, response);

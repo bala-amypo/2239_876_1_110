@@ -1,46 +1,62 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String fullName;
+    
+    @Column(unique = true)
+    private String email;
+    
+    private String password;
+    
+    private String role;
+    
+    private LocalDateTime createdAt;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public User() {
+        this.createdAt = LocalDateTime.now();
+        this.role = "USER";
+    }
 
-    private String fullName;
+    public User(String fullName, String email, String password, String role) {
+        this();
+        this.fullName = fullName;
+        this.email = email;
+        setPassword(password);
+        this.role = role != null ? role : "USER";
+    }
 
-    @Column(unique = true)
-    private String email;
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    private String password;
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    private String role;
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public User() {}
+    public String getPassword() { return password; }
+    public void setPassword(String password) { 
+        if (password != null && !password.startsWith("$2a$")) {
+            this.password = new BCryptPasswordEncoder().encode(password);
+        } else {
+            this.password = password;
+        }
+    }
 
-    public User(String fullName, String email, String password, String role) {
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    // getters & setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

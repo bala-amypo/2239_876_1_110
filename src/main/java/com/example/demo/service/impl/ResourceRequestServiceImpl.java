@@ -1,39 +1,34 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ResourceRequest;
-import com.example.demo.entity.User;
-import com.example.demo.repository.ResourceRequestRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.ResourceRequestService;
-import org.springframework.stereotype.Service;
 import java.util.List;
 
-@Service
 public class ResourceRequestServiceImpl implements ResourceRequestService {
-    private final ResourceRequestRepository requestRepository;
-    private final UserRepository userRepository;
 
-    public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository, UserRepository userRepository) {
-        this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
+    private final ResourceRequestRepository repo;
+    private final UserRepository userRepo;
+
+    public ResourceRequestServiceImpl(ResourceRequestRepository r, UserRepository u) {
+        this.repo = r;
+        this.userRepo = u;
     }
 
-    @Override
-    public ResourceRequest createRequest(Long userId, ResourceRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        request.setRequestedBy(user);
-        return requestRepository.save(request);
+    public ResourceRequest createRequest(Long userId, ResourceRequest req) {
+        User u = userRepo.findById(userId).orElseThrow();
+        req.setRequestedBy(u);
+        req.setStatus("PENDING");
+        return repo.save(req);
     }
 
-    @Override
     public List<ResourceRequest> getRequestsByUser(Long userId) {
-        return requestRepository.findByRequestedBy_Id(userId);
+        return repo.findByRequestedBy_Id(userId);
     }
 
-    @Override
-    public ResourceRequest updateRequestStatus(Long requestId, String status) {
-        ResourceRequest request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
-        request.setStatus(status);
-        return requestRepository.save(request);
+    public ResourceRequest updateRequestStatus(Long id, String status) {
+        ResourceRequest r = repo.findById(id).orElseThrow();
+        r.setStatus(status);
+        return repo.save(r);
     }
 }

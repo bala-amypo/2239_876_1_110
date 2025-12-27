@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AllocationRuleRepository extends JpaRepository<AllocationRule, Long> {
-    boolean existsByRuleName(String ruleName);
+    boolean existsByRuleName(String ruleName);
 }

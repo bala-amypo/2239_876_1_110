@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,30 +15,31 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(
-            ResourceNotFoundException ex, HttpServletRequest request) {
+            ResourceNotFoundException ex,
+            HttpServletRequest request) {
 
-        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
+        return build(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(
-            ValidationException ex, HttpServletRequest request) {
+            ValidationException ex,
+            HttpServletRequest request) {
 
-        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
+        return build(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(
-            Exception ex, HttpServletRequest request) {
+            Exception ex,
+            HttpServletRequest request) {
 
-        return buildResponse(
-                "Internal server error",
+        return build("Internal server error",
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                request
-        );
+                request);
     }
 
-    private ResponseEntity<Map<String, Object>> buildResponse(
+    private ResponseEntity<Map<String, Object>> build(
             String message,
             HttpStatus status,
             HttpServletRequest request) {

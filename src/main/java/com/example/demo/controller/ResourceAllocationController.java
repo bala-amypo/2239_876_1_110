@@ -10,27 +10,27 @@ import java.util.List;
 @RequestMapping("/api/allocations")
 public class ResourceAllocationController {
 
-    private final ResourceAllocationService allocationService;
+    private final ResourceAllocationService allocationService;
 
-    public ResourceAllocationController(ResourceAllocationService allocationService) {
-        this.allocationService = allocationService;
-    }
+    public ResourceAllocationController(ResourceAllocationService allocationService) {
+        this.allocationService = allocationService;
+    }
 
-    @PostMapping("/auto/{requestId}")
-    public ResponseEntity<ResourceAllocation> autoAllocate(@PathVariable Long requestId) {
-        ResourceAllocation allocation = allocationService.autoAllocate(requestId);
-        return ResponseEntity.ok(allocation);
-    }
+    @PostMapping("/auto/{requestId}")
+    public ResponseEntity<ResourceAllocation> autoAllocate(@PathVariable Long requestId) {
+        ResourceAllocation allocation = allocationService.autoAllocate(requestId);
+        return ResponseEntity.ok(allocation);
+    }
 
-    @GetMapping
-    public ResponseEntity<List<ResourceAllocation>> getAllAllocations() {
-        List<ResourceAllocation> allocations = allocationService.getAllAllocations();
-        return ResponseEntity.ok(allocations);
-    }
+    @GetMapping
+    public ResponseEntity<List<ResourceAllocation>> getAllAllocations() {
+        List<ResourceAllocation> allocations = allocationService.getAllAllocations();
+        return ResponseEntity.ok(allocations);
+    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResourceAllocation> getAllocation(@PathVariable Long id) {
-        ResourceAllocation allocation = allocationService.getAllocation(id);
-        return ResponseEntity.ok(allocation);
-    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ResourceAllocation> getAllocation(@PathVariable Long id) {
+        ResourceAllocation allocation = allocationService.getAllocation(id);
+        return ResponseEntity.ok(allocation);
+    }
 }

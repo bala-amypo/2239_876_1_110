@@ -1,12 +1,16 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.List;
+import com.example.demo.entity.*;
+import java.time.LocalDateTime;
+import java.util.*;
 
-@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
+}
+
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
-    boolean existsByResourceName(String resourceName);
-    List<Resource> findByResourceType(String resourceType);
+    boolean existsByResourceName(String name);
+    List<Resource> findByResourceType(String type);
 }

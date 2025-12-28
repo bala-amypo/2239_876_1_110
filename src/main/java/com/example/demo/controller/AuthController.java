@@ -35,10 +35,10 @@ public class AuthController {
         // Simple implementation for test purposes
         User user = new User("Test", request.getEmail(), request.getPassword(), "USER");
         user.setId(1L);
-
+        
         String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
         AuthResponse response = new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
-
+        
         return ResponseEntity.ok(response);
     }
 }

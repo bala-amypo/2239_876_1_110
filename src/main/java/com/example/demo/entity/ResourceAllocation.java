@@ -9,19 +9,19 @@ public class ResourceAllocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @ManyToOne
     @JoinColumn(name = "resource_id")
     private Resource resource;
-
+    
     @OneToOne
     @JoinColumn(name = "request_id")
     private ResourceRequest request;
-
+    
     private LocalDateTime allocatedAt;
-
+    
     private Boolean conflictFlag;
-
+    
     private String notes;
 
     public ResourceAllocation() {

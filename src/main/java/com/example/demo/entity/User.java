@@ -7,20 +7,19 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String fullName;
-
+    
     @Column(unique = true)
     private String email;
-
+    
     private String password;
-
+    
     private String role;
-
+    
     private LocalDateTime createdAt;
 
     public User() {
@@ -47,7 +46,7 @@ public class User {
     public void setEmail(String email) { this.email = email; }
 
     public String getPassword() { return password; }
-    public void setPassword(String password) {
+    public void setPassword(String password) { 
         if (password != null && !password.startsWith("$2a$")) {
             this.password = new BCryptPasswordEncoder().encode(password);
         } else {

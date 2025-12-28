@@ -6,23 +6,22 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "resource_requests")
 public class ResourceRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String resourceType;
-
+    
     @ManyToOne
     @JoinColumn(name = "requested_by_id")
     private User requestedBy;
-
+    
     private LocalDateTime startTime;
-
+    
     private LocalDateTime endTime;
-
+    
     private String purpose;
-
+    
     private String status;
 
     public ResourceRequest() {

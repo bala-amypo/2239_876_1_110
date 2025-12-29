@@ -43,7 +43,6 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
 
-        // JWT Security Scheme
         SecurityScheme securityScheme = new SecurityScheme()
                 .name("bearerAuth")
                 .type(SecurityScheme.Type.HTTP)
